@@ -179,7 +179,7 @@ public static class Warlock
             }
 
             // Life Tap
-            if (Me.HealthPercent > 50 && Me.ManaPercentage < 80 && _settings.UseLifeTap)
+            if (Me.HealthPercent > Me.ManaPercentage && _settings.UseLifeTap)
                 if (Cast(LifeTap))
                     return;
 
@@ -256,7 +256,7 @@ public static class Warlock
             Lua.LuaDoString("PetAttack();", false);
 
         // Life Tap
-        if (Me.HealthPercent > 50 && Me.ManaPercentage < 80 && _settings.UseLifeTap)
+        if (Me.HealthPercent > Me.ManaPercentage && _settings.UseLifeTap)
             if (Cast(LifeTap))
                 return;
 
@@ -432,7 +432,7 @@ public static class Warlock
                 return;
 
         // Life Tap
-        if (Me.HealthPercent > 40 && Me.ManaPercentage < 40 && !ObjectManager.Target.IsTargetingMe
+        if (Me.HealthPercent > 50 && Me.ManaPercentage < 40 && !ObjectManager.Target.IsTargetingMe
             && _settings.UseLifeTap)
             if (Cast(LifeTap))
                 return;

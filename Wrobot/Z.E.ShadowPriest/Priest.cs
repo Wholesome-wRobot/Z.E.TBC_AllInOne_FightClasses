@@ -338,8 +338,13 @@ public static class Priest
             if (Cast(ShadowProtection))
                 return;
 
+        // Devouring Plague
+        if (!Target.HaveBuff("Devouring Plague") && Target.HealthPercent > 80)
+            if (Cast(DevouringPlague))
+                return;
+
         // Shadow Word Death
-        if (_myManaPC > _innerManaSaveThreshold && Target.GetDistance < _maxRange 
+            if (_myManaPC > _innerManaSaveThreshold && Target.GetDistance < _maxRange 
             && _settings.UseShadowWordDeath && Target.HealthPercent < 15)
             if (Cast(ShadowWordDeath))
                 return;
@@ -442,6 +447,7 @@ public static class Priest
     private static Spell Shadowfiend = new Spell("Shadowfiend");
     private static Spell Silence = new Spell("Silence");
     private static Spell DivineSpirit = new Spell("Divine Spirit");
+    private static Spell DevouringPlague = new Spell("Devouring Plague");
 
     private static bool Cast(Spell s, bool castEvenIfWanding = true)
     {

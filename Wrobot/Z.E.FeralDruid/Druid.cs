@@ -161,6 +161,7 @@ public static class Druid
             if (ToolBox.HasCurseDebuff() && RemoveCurse.KnownSpell && RemoveCurse.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
+                Thread.Sleep(200);
                 if (Cast(RemoveCurse))
                 {
                     Lua.RunMacroText("/cleartarget");
@@ -172,6 +173,7 @@ public static class Druid
             if (ToolBox.HasPoisonDebuff() && RemoveCurse.KnownSpell && RemoveCurse.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
+                Thread.Sleep(200);
                 if (Cast(AbolishPoison))
                 {
                     Lua.RunMacroText("/cleartarget");
@@ -183,6 +185,7 @@ public static class Druid
             if (!Me.HaveBuff("Mark of the Wild") && MarkOfTheWild.KnownSpell && MarkOfTheWild.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
+                Thread.Sleep(200);
                 if (Cast(MarkOfTheWild))
                     Lua.RunMacroText("/cleartarget");
                 return;
@@ -192,6 +195,7 @@ public static class Druid
             if (!Me.HaveBuff("Thorns") && Thorns.KnownSpell && Thorns.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
+                Thread.Sleep(200);
                 if (Cast(Thorns))
                     Lua.RunMacroText("/cleartarget");
                 return;
@@ -210,7 +214,7 @@ public static class Druid
                     return;
 
             // Cat Form
-            if (!Me.HaveBuff("Cat Form") && (!_settings.UseTravelForm || Me.ManaPercentage < 50) 
+            if (!Me.HaveBuff("Cat Form") && (!_settings.UseTravelForm || !TravelForm.KnownSpell || Me.ManaPercentage < 50) 
                 && Me.ManaPercentage > wManager.wManagerSetting.CurrentSetting.DrinkPercent
                 && !ObjectManager.Target.IsFlightMaster && _settings.CatFormOOC)
             {
@@ -345,7 +349,7 @@ public static class Druid
         }
 
         // Innervate
-        if (_settings.UseInnervate && Me.HealthPercent < 50 && Me.ManaPercentage < 10)
+        if (_settings.UseInnervate && Me.ManaPercentage < 20)
             if (Cast(Innervate))
                 return;
         
@@ -589,13 +593,13 @@ public static class Druid
     {
         Main.settingRange = _pullRange;
         MovementManager.StopMoveTo(false, 500);
-        if (Me.HaveBuff("Cat Form") && FaerieFireFeral.KnownSpell)
+        if ((Me.HaveBuff("Cat Form") || Me.HaveBuff("Bear Form") || Me.HaveBuff("Dire Bear Form")) && FaerieFireFeral.KnownSpell)
         {
             Lua.RunMacroText("/cast Faerie Fire (Feral)()");
             Thread.Sleep(2000);
             return true;
         }
-        else if (Cast(FaerieFireFeral) || Cast(FaerieFire) || Cast(Wrath))
+        else if (Cast(Wrath))
         {
             Thread.Sleep(2000);
             return true;
