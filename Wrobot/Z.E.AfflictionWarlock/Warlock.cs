@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using robotManager.Helpful;
 using robotManager.Products;
@@ -246,6 +247,14 @@ public static class Warlock
                 Usefuls.WaitIsCasting();
                 Lua.RunMacroText("/cleartarget");
             }
+
+            // Cannibalize
+            if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 && u.IsDead && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
+            {
+                if (Me.HealthPercent < 50 && !Me.HaveBuff("Drink") && !Me.HaveBuff("Food") && Me.IsAlive && Cannibalize.KnownSpell && Cannibalize.IsSpellUsable)
+                    if (Cast(Cannibalize))
+                        return;
+            }
         }
     }
 
@@ -339,6 +348,32 @@ public static class Warlock
         // Pet attack
         if (ObjectManager.Pet.Target != ObjectManager.Me.Target)
             Lua.LuaDoString("PetAttack();", false);
+
+        // Mana Tap
+        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+            if (Cast(ManaTap))
+                return;
+
+        // Arcane Torrent
+        if ((Me.HaveBuff("Mana Tap") && Me.ManaPercentage < 50)
+            || (Target.IsCast && Target.GetDistance < 8))
+            if (Cast(ArcaneTorrent))
+                return;
+
+        // Will of the Forsaken
+        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+            if (Cast(WillOfTheForsaken))
+                return;
+
+        // Escape Artist
+        if (Me.Rooted || Me.HaveBuff("Frostnova"))
+            if (Cast(EscapeArtist))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
 
         // Drain Soul
         if (ToolBox.CountItemStacks("Soul Shard") < _settings.NumberOfSoulShards && Target.HealthPercent < 40)
@@ -488,6 +523,12 @@ public static class Warlock
     private static Spell Incinerate = new Spell("Incinerate");
     private static Spell SoulShatter = new Spell("Soulshatter");
     private static Spell FelDomination = new Spell("Fel Domination");
+    private static Spell Cannibalize = new Spell("Cannibalize");
+    private static Spell WillOfTheForsaken = new Spell("Will of the Forsaken");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell EscapeArtist = new Spell("Escape Artist");
+    private static Spell ManaTap = new Spell("Mana Tap");
+    private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
 
     private static bool Cast(Spell s, bool castEvenIfWanding = true)
     {

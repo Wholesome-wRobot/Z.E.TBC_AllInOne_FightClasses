@@ -158,10 +158,10 @@ public static class Hunter
 						Lua.LuaDoString("PetAttack();", false);
 
                     // Aspect of the Cheetah
-                    if (!Me.IsMounted && !Fight.InFight && !Me.HaveBuff("Aspect of the Cheetah") 
-                        && MovementManager.InMoveTo && AspectCheetah.IsSpellUsable && AspectCheetah.KnownSpell 
-                        && Me.ManaPercentage > 60f)
-                        AspectCheetah.Launch();
+                    if (!Me.IsMounted && !Fight.InFight && !Me.HaveBuff("Aspect of the Cheetah")
+                        && MovementManager.InMoveTo && Me.ManaPercentage > 60f)
+                        if (Cast(AspectCheetah))
+                            return;
 
 					if (Fight.InFight && Me.Target > 0UL && ObjectManager.Target.IsAttackable)
 						CombatRotation();
@@ -186,72 +186,112 @@ public static class Hunter
         if (Target.GetDistance > 10f && !_isBackingUp)
             ReenableAutoshot();
 
+        // Mana Tap
+        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+            if (Cast(ManaTap))
+                return;
+
+        // Arcane Torrent
+        if ((Me.HaveBuff("Mana Tap") && Me.ManaPercentage < 50)
+            || (Target.IsCast && Target.GetDistance < 8))
+            if (Cast(ArcaneTorrent))
+                return;
+
+        // Gift of the Naaru
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+            if (Cast(GiftOfTheNaaru))
+                return;
+
+        // Blood Fury
+        if (Target.HealthPercent > 70)
+            if (Cast(BloodFury))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
+
+        // Stoneform
+        if (ToolBox.HasPoisonDebuff() || ToolBox.HasDiseaseDebuff() || Me.HaveBuff("Bleed"))
+            if (Cast(Stoneform))
+                return;
+
+        // Warstomp
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Target.GetDistance < 8)
+            if (Cast(WarStomp))
+                return;
+
         // Aspect of the viper
-        if (AspectViper.KnownSpell && AspectViper.IsSpellUsable && !Me.HaveBuff("Aspect of the Viper")
-            && Me.ManaPercentage < 30)
-            AspectViper.Launch();
+        if (!Me.HaveBuff("Aspect of the Viper") && Me.ManaPercentage < 30)
+            if (Cast(AspectViper))
+                return;
 
         // Aspect of the Hawk
-        if (AspectHawk.KnownSpell && AspectHawk.IsSpellUsable && !Me.HaveBuff("Aspect of the Hawk")
-            && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah")))
-            AspectHawk.Launch();
+        if (!Me.HaveBuff("Aspect of the Hawk") && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah")))
+            if (Cast(AspectHawk))
+                return;
 
         // Aspect of the Monkey
-        if (AspectMonkey.KnownSpell && AspectMonkey.IsSpellUsable && !Me.HaveBuff("Aspect of the Monkey")
-            && !AspectHawk.KnownSpell)
-            AspectMonkey.Launch();
+        if (!Me.HaveBuff("Aspect of the Monkey") && !AspectHawk.KnownSpell)
+            if (Cast(AspectMonkey))
+                return;
 
         // Disengage
-        if (Disengage.KnownSpell && Disengage.IsSpellUsable && ObjectManager.Pet.Target == Me.Target
-            && Target.Target == Me.Guid && Target.GetDistance < 10 && !_isBackingUp)
-            Disengage.Launch();
+        if (ObjectManager.Pet.Target == Me.Target && Target.Target == Me.Guid && Target.GetDistance < 10 && !_isBackingUp)
+            if (Cast(Disengage))
+                return;
 
         // Bestial Wrath
-        if (BestialWrath.KnownSpell && BestialWrath.IsSpellUsable && Target.GetDistance < 34f
-        && Target.HealthPercent >= 60 && Me.ManaPercentage > 10 && BestialWrath.IsSpellUsable
+        if (Target.GetDistance < 34f && Target.HealthPercent >= 60 && Me.ManaPercentage > 10 && BestialWrath.IsSpellUsable
         && ((_settings.BestialWrathOnMulti && ObjectManager.GetUnitAttackPlayer().Count > 1) || !_settings.BestialWrathOnMulti))
-            BestialWrath.Launch();
+            if (Cast(BestialWrath))
+                return;
 
         // Rapid Fire
-        if (RapidFire.KnownSpell && RapidFire.IsSpellUsable && Target.GetDistance < 34f
-            && Target.HealthPercent >= 80.0
+        if ( Target.GetDistance < 34f && Target.HealthPercent >= 80.0
             && ((_settings.RapidFireOnMulti && ObjectManager.GetUnitAttackPlayer().Count > 1) || !_settings.RapidFireOnMulti))
-            RapidFire.Launch();
+            if (Cast(RapidFire))
+                return;
 
         // Kill Command
-        if (KillCommand.KnownSpell && KillCommand.IsSpellUsable)
-            KillCommand.Launch();
-        
+        if (Cast(KillCommand))
+            return;
+
         // Raptor Strike
-        if (RaptorStrike.KnownSpell && RaptorStrike.IsSpellUsable && Target.GetDistance < 6f && !RaptorStrikeOn())
-            RaptorStrike.Launch();
-        
+        if (Target.GetDistance < 6f && !RaptorStrikeOn())
+            if (Cast(RaptorStrike))
+                return;
+
         // Mongoose Bite
-        if (MongooseBite.KnownSpell && MongooseBite.IsSpellUsable && Target.GetDistance < 6f)
-            MongooseBite.Launch();
-        
+        if (Target.GetDistance < 6f)
+            if (Cast(MongooseBite))
+                return;
+
         // Feign Death
-        if (FeignDeath.KnownSpell && FeignDeath.IsSpellUsable && Me.HealthPercent < 20)
-        {
-            FeignDeath.Launch();
-            Fight.StopFight();
-        }
+        if (Me.HealthPercent < 20)
+            if (Cast(FeignDeath))
+            {
+                Fight.StopFight();
+                return;
+            }
 
         // Freezing Trap
-        if (FreezingTrap.KnownSpell && FreezingTrap.IsSpellUsable && ObjectManager.Pet.HaveBuff("Mend Pet")
-            && ObjectManager.GetUnitAttackPlayer().Count > 1 && _settings.UseFreezingTrap)
-            FreezingTrap.Launch();
-        
+        if (ObjectManager.Pet.HaveBuff("Mend Pet") && ObjectManager.GetUnitAttackPlayer().Count > 1 && _settings.UseFreezingTrap)
+            if (Cast(FreezingTrap))
+                return;
+
         // Mend Pet
-        if (ObjectManager.Pet.IsValid && MendPet.KnownSpell && MendPet.IsSpellUsable && ObjectManager.Pet.HealthPercent <= 30.0 
+        if (ObjectManager.Pet.IsValid && ObjectManager.Pet.HealthPercent <= 30.0 
             && !ObjectManager.Pet.HaveBuff("Mend Pet"))
-			MendPet.Launch();
-		
+            if (Cast(MendPet))
+                return;
+    
         // Hunter's Mark
-		if (HuntersMark.KnownSpell && HuntersMark.IsSpellUsable && ObjectManager.Pet.IsValid && !HuntersMark.TargetHaveBuff 
-            && Target.GetDistance > 13f && Target.IsAlive)
-			HuntersMark.Launch();
-        
+        if (ObjectManager.Pet.IsValid && !HuntersMark.TargetHaveBuff && Target.GetDistance > 13f && Target.IsAlive)
+            if (Cast(HuntersMark))
+                return;
+
         // Steady Shot
         if (SteadyShot.KnownSpell && SteadyShot.IsSpellUsable && Me.ManaPercentage > 30 && SteadyShot.IsDistanceGood && !_isBackingUp)
         {
@@ -260,23 +300,23 @@ public static class Hunter
         }
 
         // Serpent Sting
-        if (SerpentSting.KnownSpell && SerpentSting.IsSpellUsable && !Target.HaveBuff("Serpent Sting") 
-            && Target.GetDistance < 34f && ToolBox.CanBleed(Me.TargetObject) 
+        if (!Target.HaveBuff("Serpent Sting") && Target.GetDistance < 34f && ToolBox.CanBleed(Me.TargetObject) 
             && Target.HealthPercent >= 80 && Me.ManaPercentage > 50u && !SteadyShot.KnownSpell
             && Target.GetDistance > 13f)
-			SerpentSting.Launch();
-		
+            if (Cast(SerpentSting))
+                return;
+
         // Intimidation
-		if (Intimidation.KnownSpell && Intimidation.IsSpellUsable && Target.GetDistance < 34f 
-            && Target.GetDistance > 10f && Target.HealthPercent >= 20 && Me.ManaPercentage > 10
-            && Intimidation.IsSpellUsable)
-			Intimidation.Launch();
-		
+        if (Target.GetDistance < 34f && Target.GetDistance > 10f && Target.HealthPercent >= 20 
+            && Me.ManaPercentage > 10)
+            if (Cast(Intimidation))
+                return;
+
         // Arcane Shot
-		if (ArcaneShot.KnownSpell && ArcaneShot.IsSpellUsable && Target.GetDistance < 34f 
-            && Target.HealthPercent >= 30 && Me.ManaPercentage > 80
+        if (Target.GetDistance < 34f && Target.HealthPercent >= 30 && Me.ManaPercentage > 80
             && !SteadyShot.KnownSpell)
-			ArcaneShot.Launch();
+            if (Cast(ArcaneShot))
+                return;
     }
 
     public static void Feed()
@@ -316,6 +356,25 @@ public static class Hunter
                 Thread.Sleep(Usefuls.Latency + 1000);
             }
         }
+    }
+
+    internal static bool Cast(Spell s)
+    {
+        if (!s.KnownSpell)
+            return false;
+
+        CombatDebug("In cast for " + s.Name);
+        if (!s.IsSpellUsable || Me.IsCast)
+            return false;
+
+        s.Launch();
+        return true;
+    }
+
+    private static void CombatDebug(string s)
+    {
+        if (_settings.ActivateCombatDebug)
+            Main.CombatDebug(s);
     }
 
     private static bool RaptorStrikeOn()
@@ -365,4 +424,11 @@ public static class Hunter
     private static Spell KillCommand = new Spell("Kill Command");
     private static Spell Disengage = new Spell("Disengage");
     private static Spell Attack = new Spell("Attack");
+    private static Spell BloodFury = new Spell("Blood Fury");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell WarStomp = new Spell("War Stomp");
+    private static Spell Stoneform = new Spell("Stoneform");
+    private static Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
+    private static Spell ManaTap = new Spell("Mana Tap");
+    private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
 }

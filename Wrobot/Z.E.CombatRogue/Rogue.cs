@@ -151,6 +151,14 @@ public static class Rogue
             if (_settings.SprintWhenAvail && Me.HealthPercent > 80 && MovementManager.InMovement && Sprint.IsSpellUsable
                 && Sprint.KnownSpell)
                 Sprint.Launch();
+
+            // Cannibalize
+            if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 && u.IsDead && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
+            {
+                if (Me.HealthPercent < 50 && !Me.HaveBuff("Drink") && !Me.HaveBuff("Food") && Me.IsAlive && Cannibalize.KnownSpell && Cannibalize.IsSpellUsable)
+                    if (Cast(Cannibalize))
+                        return;
+            }
         }
     }
 
@@ -341,6 +349,41 @@ public static class Rogue
                 return;
         }
 
+        // Mana Tap
+        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+            if (Cast(ManaTap))
+                return;
+
+        // Arcane Torrent
+        if (Target.IsCast && Target.GetDistance < 8)
+            if (Cast(ArcaneTorrent))
+                return;
+
+        // Escape Artist
+        if (Me.Rooted || Me.HaveBuff("Frostnova"))
+            if (Cast(EscapeArtist))
+                return;
+
+        // Stoneform
+        if (ToolBox.HasPoisonDebuff() || ToolBox.HasDiseaseDebuff() || Me.HaveBuff("Bleed"))
+            if (Cast(Stoneform))
+                return;
+
+        // Will of the Forsaken
+        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+            if (Cast(WillOfTheForsaken))
+                return;
+
+        // Blood Fury
+        if (Target.HealthPercent > 70)
+            if (Cast(BloodFury))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
+
         // Adrenaline Rush
         if ((ObjectManager.GetNumberAttackPlayer() > 1 || Target.IsElite) && !Me.HaveBuff("Adrenaline Rush"))
             if (Cast(AdrenalineRush))
@@ -452,6 +495,14 @@ public static class Rogue
     private static Spell KidneyShot = new Spell("Kidney Shot");
     private static Spell Hemorrhage = new Spell("Hemorrhage");
     private static Spell GhostlyStrike = new Spell("Ghostly Strike");
+    private static Spell Cannibalize = new Spell("Cannibalize");
+    private static Spell WillOfTheForsaken = new Spell("Will of the Forsaken");
+    private static Spell BloodFury = new Spell("Blood Fury");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell Stoneform = new Spell("Stoneform");
+    private static Spell EscapeArtist = new Spell("Escape Artist");
+    private static Spell ManaTap = new Spell("Mana Tap");
+    private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
 
     internal static bool Cast(Spell s)
     {

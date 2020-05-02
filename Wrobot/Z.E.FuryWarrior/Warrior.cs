@@ -9,6 +9,7 @@ using wManager.Wow.Helpers;
 using wManager.Wow.ObjectManager;
 using System.Collections.Generic;
 using wManager.Wow.Bot.Tasks;
+using System.Linq;
 
 public static class Warrior
 {
@@ -94,6 +95,14 @@ public static class Warrior
             if (!Me.HaveBuff("Commanding Shout") && (_settings.UseCommandingShout && CommandingShout.KnownSpell))
                 if (Cast(CommandingShout))
                     return;
+
+            // Cannibalize
+            if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 && u.IsDead && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
+            {
+                if (Me.HealthPercent < 50 && !Me.HaveBuff("Drink") && !Me.HaveBuff("Food") && Me.IsAlive && Cannibalize.KnownSpell && Cannibalize.IsSpellUsable)
+                    if (Cast(Cannibalize))
+                        return;
+            }
         }
     }
 
@@ -197,6 +206,41 @@ public static class Warrior
             Main.settingRange = _meleRange;
             _meleeTimer.Stop();
         }
+
+        // Gift of the Naaru
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+            if (Cast(GiftOfTheNaaru))
+                return;
+
+        // Will of the Forsaken
+        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+            if (Cast(WillOfTheForsaken))
+                return;
+
+        // Stoneform
+        if (ToolBox.HasPoisonDebuff() || ToolBox.HasDiseaseDebuff() || Me.HaveBuff("Bleed"))
+            if (Cast(Stoneform))
+                return;
+
+        // Escape Artist
+        if (Me.Rooted || Me.HaveBuff("Frostnova"))
+            if (Cast(EscapeArtist))
+                return;
+
+        // Warstomp
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Target.GetDistance < 8)
+            if (Cast(WarStomp))
+                return;
+
+        // Blood Fury
+        if (Target.HealthPercent > 70)
+            if (Cast(BloodFury))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
 
         // Battle stance
         if (InBerserkStance() && Me.Rage < 10 && (!_settings.PrioritizeBerserkStance || ObjectManager.GetNumberAttackPlayer() > 1) 
@@ -345,6 +389,14 @@ public static class Warrior
     private static Spell BerserkerRage = new Spell("Berserker Rage");
     private static Spell Rampage = new Spell("Rampage");
     private static Spell VictoryRush = new Spell("Victory Rush");
+    private static Spell Cannibalize = new Spell("Cannibalize");
+    private static Spell WillOfTheForsaken = new Spell("Will of the Forsaken");
+    private static Spell BloodFury = new Spell("Blood Fury");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell WarStomp = new Spell("War Stomp");
+    private static Spell Stoneform = new Spell("Stoneform");
+    private static Spell EscapeArtist = new Spell("Escape Artist");
+    private static Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
 
     internal static bool Cast(Spell s)
     {

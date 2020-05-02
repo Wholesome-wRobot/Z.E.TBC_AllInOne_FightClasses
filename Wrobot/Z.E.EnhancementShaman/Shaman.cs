@@ -233,6 +233,26 @@ public static class Shaman
             if (Cast(ShamanisticRage))
                 return;
 
+        // Gift of the Naaru
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+            if (Cast(GiftOfTheNaaru))
+                return;
+
+        // Blood Fury
+        if (Target.HealthPercent > 70)
+            if (Cast(BloodFury))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
+
+        // Warstomp
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Target.GetDistance < 8)
+            if (Cast(WarStomp))
+                return;
+
         // Lesser Healing Wave
         if (Me.HealthPercent < 50 && LesserHealingWave.KnownSpell && (Target.HealthPercent > 15 || Me.HealthPercent < 25))
             if (Cast(LesserHealingWave))
@@ -345,6 +365,10 @@ public static class Shaman
     private static Spell Stormstrike = new Spell("Stormstrike");
     private static Spell ShamanisticRage = new Spell("Shamanistic Rage");
     private static Spell Attack = new Spell("Attack");
+    private static Spell BloodFury = new Spell("Blood Fury");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell WarStomp = new Spell("War Stomp");
+    private static Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
 
     internal static bool Cast(Spell s)
     {

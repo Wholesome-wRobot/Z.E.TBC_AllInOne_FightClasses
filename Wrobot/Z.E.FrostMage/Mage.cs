@@ -7,6 +7,7 @@ using wManager.Wow.Class;
 using wManager.Wow.Helpers;
 using wManager.Wow.ObjectManager;
 using System.ComponentModel;
+using System.Linq;
 
 public static class Mage
 {
@@ -153,6 +154,15 @@ public static class Mage
         if (Me.ManaPercentage < 30)
             if (Cast(Evocation))
                 return;
+
+        
+        // Cannibalize
+        if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 && u.IsDead && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
+        {
+            if (Me.HealthPercent < 50 && !Me.HaveBuff("Drink") && !Me.HaveBuff("Food") && Me.IsAlive && Cannibalize.KnownSpell && Cannibalize.IsSpellUsable)
+                if (Cast(Cannibalize))
+                    return;
+        }
     }
 
     internal static void Pull()
@@ -196,6 +206,37 @@ public static class Mage
             if (Cast(RemoveCurse))
                 return;
         }
+
+        // Mana Tap
+        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+            if (Cast(ManaTap))
+                return;
+
+        // Arcane Torrent
+        if ((Me.HaveBuff("Mana Tap") && Me.ManaPercentage < 50)
+            || (Target.IsCast && Target.GetDistance < 8))
+            if (Cast(ArcaneTorrent))
+                return;
+
+        // Gift of the Naaru
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+            if (Cast(GiftOfTheNaaru))
+                return;
+
+        // Escape Artist
+        if (Me.Rooted || Me.HaveBuff("Frostnova"))
+            if (Cast(EscapeArtist))
+                return;
+
+        // Will of the Forsaken
+        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+            if (Cast(WillOfTheForsaken))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
 
         // Summon Water Elemental
         if (Target.HealthPercent > 95 || ObjectManager.GetNumberAttackPlayer() > 1)
@@ -375,4 +416,11 @@ public static class Mage
     private static Spell RemoveCurse = new Spell("Remove Curse");
     private static Spell IceArmor = new Spell("Ice Armor");
     private static Spell ManaShield = new Spell("Mana Shield");
+    private static Spell Cannibalize = new Spell("Cannibalize");
+    private static Spell WillOfTheForsaken = new Spell("Will of the Forsaken");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell EscapeArtist = new Spell("Escape Artist");
+    private static Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
+    private static Spell ManaTap = new Spell("Mana Tap");
+    private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
 }

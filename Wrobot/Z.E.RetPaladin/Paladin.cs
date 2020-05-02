@@ -148,6 +148,23 @@ public static class Paladin
             Lua.RunMacroText("/cleartarget");
         }
 
+        // Mana Tap
+        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+            Cast(ManaTap);
+
+        // Arcane Torrent
+        if ((Me.HaveBuff("Mana Tap") && Me.ManaPercentage < 50) 
+            || (Target.IsCast && Target.GetDistance < 8))
+            Cast(ArcaneTorrent);
+
+        // Gift of the Naaru
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+            Cast(GiftOfTheNaaru);
+
+        // Stoneform
+        if (ToolBox.HasPoisonDebuff() || ToolBox.HasDiseaseDebuff() || Me.HaveBuff("Bleed"))
+            Cast(Stoneform);
+
         // Devotion Aura multi
         if ((ObjectManager.GetNumberAttackPlayer() > 1 && _settings.DevoAuraOnMulti) && 
             !Me.HaveBuff("Devotion Aura"))
@@ -270,6 +287,10 @@ public static class Paladin
     private static Spell Attack = new Spell("Attack");
     private static Spell CrusaderAura = new Spell("Crusader Aura");
     private static Spell AvengingWrath = new Spell("Avenging Wrath");
+    private static Spell Stoneform = new Spell("Stoneform");
+    private static Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
+    private static Spell ManaTap = new Spell("Mana Tap");
+    private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
 
     private static void Cast(Spell s)
     {

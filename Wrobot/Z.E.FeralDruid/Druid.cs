@@ -9,8 +9,6 @@ using wManager.Wow.Helpers;
 using wManager.Wow.ObjectManager;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using robotManager.FiniteStateMachine;
 
 public static class Druid
 {
@@ -516,6 +514,11 @@ public static class Druid
 
         if (!Me.HaveBuff("Bear Form") && !Me.HaveBuff("Cat Form") && !Me.HaveBuff("Dire Bear Form"))
         {
+            // Warstomp
+            if (ObjectManager.GetNumberAttackPlayer() > 1 && Target.GetDistance < 8)
+                if (Cast(WarStomp))
+                    return;
+
             // Moonfire
             if (!Target.HaveBuff("Moonfire") && Me.ManaPercentage > 35 && Target.HealthPercent > 30 && Me.Level >= 8)
                 if (Cast(Moonfire))
@@ -583,6 +586,7 @@ public static class Druid
     private static Spell MangleBear = new Spell("Mangle (Bear)");
     private static Spell Maim = new Spell("Maim");
     private static Spell OmenOfClarity = new Spell("Omen of Clarity");
+    private static Spell WarStomp = new Spell("War Stomp");
 
     private static bool MaulOn()
     {

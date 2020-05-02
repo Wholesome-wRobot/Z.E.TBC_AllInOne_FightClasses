@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using robotManager.Helpful;
 using robotManager.Products;
@@ -169,6 +170,14 @@ public static class Priest
             if (!Me.HaveBuff("ShadowForm") && ObjectManager.GetNumberAttackPlayer() < 1 && Shadowform.IsSpellUsable)
                 if (Cast(Shadowform))
                     return;
+
+            // Cannibalize
+            if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 && u.IsDead && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
+            {
+                if (Me.HealthPercent < 50 && !Me.HaveBuff("Drink") && !Me.HaveBuff("Food") && Me.IsAlive && Cannibalize.KnownSpell && Cannibalize.IsSpellUsable)
+                    if (Cast(Cannibalize))
+                        return;
+            }
         }
     }
 
@@ -230,6 +239,37 @@ public static class Priest
         int _innerFocusCD = Lua.LuaDoString<int>("local start, duration, enabled = GetSpellCooldown(\"Inner Focus\"); return start + duration - GetTime();");
         bool _shoulBeInterrupted = ToolBox.EnemyCasting();
         WoWUnit Target = ObjectManager.Target;
+
+        // Mana Tap
+        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+            if (Cast(ManaTap))
+                return;
+
+        // Arcane Torrent
+        if ((Me.HaveBuff("Mana Tap") && Me.ManaPercentage < 50)
+            || (Target.IsCast && Target.GetDistance < 8))
+            if (Cast(ArcaneTorrent))
+                return;
+
+        // Gift of the Naaru
+        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+            if (Cast(GiftOfTheNaaru))
+                return;
+
+        // Will of the Forsaken
+        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+            if (Cast(WillOfTheForsaken))
+                return;
+
+        // Stoneform
+        if (ToolBox.HasPoisonDebuff() || ToolBox.HasDiseaseDebuff() || Me.HaveBuff("Bleed"))
+            if (Cast(Stoneform))
+                return;
+
+        // Berserking
+        if (Target.HealthPercent > 70)
+            if (Cast(Berserking))
+                return;
 
         // Power Word Shield on multi aggro
         if (!Me.HaveBuff("Power Word: Shield") && !_hasWeakenedSoul 
@@ -448,6 +488,13 @@ public static class Priest
     private static Spell Silence = new Spell("Silence");
     private static Spell DivineSpirit = new Spell("Divine Spirit");
     private static Spell DevouringPlague = new Spell("Devouring Plague");
+    private static Spell Cannibalize = new Spell("Cannibalize");
+    private static Spell WillOfTheForsaken = new Spell("Will of the Forsaken");
+    private static Spell Berserking = new Spell("Berserking");
+    private static Spell Stoneform = new Spell("Stoneform");
+    private static Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
+    private static Spell ManaTap = new Spell("Mana Tap");
+    private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
 
     private static bool Cast(Spell s, bool castEvenIfWanding = true)
     {
