@@ -160,8 +160,7 @@ public static class Hunter
                     // Aspect of the Cheetah
                     if (!Me.IsMounted && !Fight.InFight && !Me.HaveBuff("Aspect of the Cheetah")
                         && MovementManager.InMoveTo && Me.ManaPercentage > 60f)
-                        if (Cast(AspectCheetah))
-                            return;
+                        Cast(AspectCheetah);
 
 					if (Fight.InFight && Me.Target > 0UL && ObjectManager.Target.IsAttackable)
 						CombatRotation();
