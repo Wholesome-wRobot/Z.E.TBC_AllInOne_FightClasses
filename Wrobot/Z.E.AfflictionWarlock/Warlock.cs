@@ -216,7 +216,7 @@ public static class Warlock
             if (ObjectManager.Pet.HealthPercent < 50 && Me.HealthPercent > 40 && ObjectManager.Pet.GetDistance < 19
                 && !ObjectManager.Pet.InCombatFlagOnly && HealthFunnel.KnownSpell)
             {
-                if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker"))
+                if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") && ToolBox.GetPetSpellIndex("Consume Shadows") != 0)
                     ToolBox.PetSpellCast("Consume Shadows");
 
                 ToolBox.StopWandWaitGCD(UseWand, ShadowBolt);

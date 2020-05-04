@@ -138,7 +138,7 @@ public static class Hunter
 			{
 				if (!Products.InPause && !Me.IsDeadMe)
 				{
-                    Main.settingRange = _canOnlyMelee ? 4.5f : 33f;
+                    Main.settingRange = _canOnlyMelee ? 4.5f : 30f;
                     PetManager();
 
                     // Switch Auto Growl
@@ -185,6 +185,9 @@ public static class Hunter
         if (Target.GetDistance > 10f && !_isBackingUp)
             ReenableAutoshot();
 
+        if (Target.GetDistance < 13f && !ZEBMHunterSettings.CurrentSetting.BackupFromMelee)
+            _canOnlyMelee = true;
+
         // Mana Tap
         if (Target.Mana > 0 && Target.ManaPercentage > 10)
             if (Cast(ManaTap))
@@ -227,7 +230,8 @@ public static class Hunter
                 return;
 
         // Aspect of the Hawk
-        if (!Me.HaveBuff("Aspect of the Hawk") && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah")))
+        if (!Me.HaveBuff("Aspect of the Hawk") && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah"))
+            || (!Me.HaveBuff("Aspect of the Hawk") && !Me.HaveBuff("Aspect of the Cheetah")))
             if (Cast(AspectHawk))
                 return;
 
