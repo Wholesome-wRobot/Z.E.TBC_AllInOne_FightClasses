@@ -231,7 +231,7 @@ public static class Hunter
 
         // Aspect of the Hawk
         if (!Me.HaveBuff("Aspect of the Hawk") && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah"))
-            || (!Me.HaveBuff("Aspect of the Hawk") && !Me.HaveBuff("Aspect of the Cheetah")))
+            || (!Me.HaveBuff("Aspect of the Hawk") && !Me.HaveBuff("Aspect of the Cheetah") && !Me.HaveBuff("Aspect of the Viper")))
             if (Cast(AspectHawk))
                 return;
 
