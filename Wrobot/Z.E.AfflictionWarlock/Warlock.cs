@@ -152,8 +152,51 @@ public static class Warlock
                 ToolBox.TogglePetSpellAuto("Suffering", false);
             }
 
+            // Summon Felguard
+            if ((!ObjectManager.Pet.IsValid 
+                || PetAndConsumables.MyWarlockPet().Equals("Voidwalker") || PetAndConsumables.MyWarlockPet().Equals("Imp")) 
+                && SummonFelguard.KnownSpell)
+            {
+                Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
+                if (!ObjectManager.Me.IsMounted)
+                {
+                    if (Cast(FelDomination))
+                        Thread.Sleep(200);
+                    if (Cast(SummonFelguard))
+                        return;
+                }
+            }
+
+            // Summon Felguard for mana
+            if (SummonFelguard.KnownSpell && ObjectManager.Pet.ManaPercentage < 20 && ObjectManager.Pet.IsValid)
+            {
+                Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
+                if (!ObjectManager.Me.IsMounted)
+                {
+                    if (Cast(FelDomination))
+                        Thread.Sleep(200);
+                    if (Cast(SummonFelguard))
+                        return;
+                }
+            }
+
             // Summon Void Walker
-            if ((!ObjectManager.Pet.IsValid || !PetAndConsumables.MyWarlockPet().Equals("Voidwalker")) && SummonVoidwalker.KnownSpell)
+            if ((!ObjectManager.Pet.IsValid || !PetAndConsumables.MyWarlockPet().Equals("Voidwalker")) && SummonVoidwalker.KnownSpell
+                && !SummonFelguard.KnownSpell)
+            {
+                Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
+                if (!ObjectManager.Me.IsMounted)
+                {
+                    if (Cast(FelDomination))
+                        Thread.Sleep(200);
+                    if (Cast(SummonVoidwalker))
+                        return;
+                }
+            }
+
+            // Summon Void Walker for mana
+            if ((PetAndConsumables.MyWarlockPet().Equals("Voidwalker")) && SummonVoidwalker.KnownSpell && ObjectManager.Pet.ManaPercentage < 20
+                && !SummonFelguard.KnownSpell)
             {
                 Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
                 if (!ObjectManager.Me.IsMounted)
@@ -207,6 +250,11 @@ public static class Warlock
                 if (Cast(DemonArmor))
                     return;
 
+            // Soul Link
+            if (SoulLink.KnownSpell && !Me.HaveBuff("Soul Link"))
+                if (Cast(SoulLink))
+                    return;
+
             // Fel Armor
             if (!Me.HaveBuff("Fel Armor") && FelArmor.KnownSpell && _settings.UseFelArmor)
                 if (Cast(FelArmor))
@@ -216,12 +264,23 @@ public static class Warlock
             if (ObjectManager.Pet.HealthPercent < 50 && Me.HealthPercent > 40 && ObjectManager.Pet.GetDistance < 19
                 && !ObjectManager.Pet.InCombatFlagOnly && HealthFunnel.KnownSpell)
             {
+                Fight.StopFight();
+                MovementManager.StopMove();
                 if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") && ToolBox.GetPetSpellIndex("Consume Shadows") != 0)
+                {
                     ToolBox.PetSpellCast("Consume Shadows");
+                    Usefuls.WaitIsCasting();
+                    MovementManager.StopMove();
+                    Thread.Sleep(500);
+                }
+
 
                 ToolBox.StopWandWaitGCD(UseWand, ShadowBolt);
+                MovementManager.StopMove();
+                MovementManager.StopMoveNewThread();
                 if (Cast(HealthFunnel))
                 {
+                    Thread.Sleep(500);
                     Usefuls.WaitIsCasting();
                     return;
                 }
@@ -294,7 +353,7 @@ public static class Warlock
                 return;
 
         // Immolate
-        if (ObjectManager.Target.GetDistance < _maxRange + 2 && !Corruption.KnownSpell)
+        if (ObjectManager.Target.GetDistance < _maxRange + 2 && !Corruption.KnownSpell && ToolBox.CanBleed(ObjectManager.Target))
             if (Cast(Immolate))
                 return;
 
@@ -425,7 +484,8 @@ public static class Warlock
 
         // Immolate
         if (ObjectManager.Target.GetDistance < _maxRange && !Target.HaveBuff("Immolate") && _overLowManaThreshold
-            && Target.HealthPercent > 30 && (_settings.UseImmolateHighLevel || !UnstableAffliction.KnownSpell))
+            && Target.HealthPercent > 30 && (_settings.UseImmolateHighLevel || !UnstableAffliction.KnownSpell)
+            && ToolBox.CanBleed(ObjectManager.Target))
             if (Cast(Immolate))
                 return;
 
@@ -506,6 +566,7 @@ public static class Warlock
     private static Spell LifeTap = new Spell("Life Tap");
     private static Spell SummonImp = new Spell("Summon Imp");
     private static Spell SummonVoidwalker = new Spell("Summon Voidwalker");
+    private static Spell SummonFelguard = new Spell("Summon Felguard");
     private static Spell CurseOfAgony = new Spell("Curse of Agony");
     private static Spell DrainSoul = new Spell("Drain Soul");
     private static Spell DrainLife = new Spell("Drain Life");
@@ -529,6 +590,7 @@ public static class Warlock
     private static Spell EscapeArtist = new Spell("Escape Artist");
     private static Spell ManaTap = new Spell("Mana Tap");
     private static Spell ArcaneTorrent = new Spell("Arcane Torrent");
+    private static Spell SoulLink = new Spell("Soul Link");
 
     private static bool Cast(Spell s, bool castEvenIfWanding = true)
     {
