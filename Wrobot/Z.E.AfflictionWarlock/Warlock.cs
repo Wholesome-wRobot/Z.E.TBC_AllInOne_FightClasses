@@ -167,8 +167,9 @@ public static class Warlock
                 }
             }
 
-            // Summon Felguard for mana
-            if (SummonFelguard.KnownSpell && ObjectManager.Pet.ManaPercentage < 20 && ObjectManager.Pet.IsValid)
+            // Summon Felguard for mana or health
+            if (SummonFelguard.KnownSpell && (ObjectManager.Pet.ManaPercentage < 20 || ObjectManager.Pet.HealthPercent < 20) 
+                && ObjectManager.Pet.IsValid)
             {
                 Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
                 if (!ObjectManager.Me.IsMounted)

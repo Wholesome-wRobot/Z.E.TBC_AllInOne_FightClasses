@@ -483,47 +483,4 @@ public class ToolBox
     }
 
     #endregion
-
-    /*
-    public static bool GroupCureSpellPoison(Spell spell)
-    {
-        if (!spell.KnownSpell || !spell.IsSpellUsable)
-        {
-            return false;
-        }
-
-        IEnumerable<WoWPlayer> members = Partystuff.getPartymembers().Where(o => o.IsAlive);
-
-        if (members.Count() > 0)
-        {
-            foreach (WoWPlayer member in members)
-            {
-                Logging.Write("Checking if " + member.Name + " has poison debuff : " + HasPoisonDebuff(member));
-                if (!TraceLine.TraceLineGo(member.Position) && HasPoisonDebuff(member))
-                {
-                    ObjectManager.Me.FocusGuid = member.Guid;
-                    Lua.LuaDoString($"CastSpellByID({ spell.Id}, \"focus\")");
-                    Usefuls.WaitIsCasting();
-                    Logging.Write("Casting Cure Poison @ focus: " + spell);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static bool HasPoisonDebuff(WoWPlayer unit)
-    {
-        return Lua.LuaDoString<bool>
-            ($@"for i=1,25 do 
-                local _, _, _, _, d  = UnitDebuff('{unit.Name}',i);
-                if d == 'Poison' then
-                return true
-                end
-            end");
-    }
-
-    public static WoWPlayer healtarget;
-    string haspoison = Lua.LuaDoString<string>(", , , , Debuff = UnitDebuff(" + healtarget + "); return Debuff;");
-    */
 }
