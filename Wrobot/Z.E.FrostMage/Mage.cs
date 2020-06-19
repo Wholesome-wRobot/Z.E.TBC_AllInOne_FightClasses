@@ -100,7 +100,7 @@ public static class Mage
         {
             try
             {
-                if (!Products.InPause && !ObjectManager.Me.IsDeadMe)
+                if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     if (!Fight.InFight && !ObjectManager.Me.InCombatFlagOnly && !Me.IsMounted)
                         BuffRotation();

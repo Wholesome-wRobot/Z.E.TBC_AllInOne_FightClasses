@@ -14,11 +14,12 @@ public class Main : ICustomClass
     public static float settingRange = 5f;
     public static int _humanReflexTime = 500; 
     public static bool _isLaunched;
-    public static string version = "1.4.1"; // Must match version in Version.txt
+    public static string version = "1.5.0"; // Must match version in Version.txt
     private static bool _debug = false;
     private static bool _saveCalcuCombatRangeSetting = wManager.wManagerSetting.CurrentSetting.CalcuCombatRange;
     private static readonly BackgroundWorker _talentThread = new BackgroundWorker();
     public bool haveCheckedForUpdate = false;
+    public static bool HMPrunningAway = false;
 
     public float Range
 	{
@@ -41,6 +42,7 @@ public class Main : ICustomClass
             FightEvents.OnFightEnd += (ulong guid) =>
             {
                 wManager.wManagerSetting.CurrentSetting.CalcuCombatRange = _saveCalcuCombatRangeSetting;
+                //HMPrunningAway = false;
             };
 
             // Fight start
@@ -48,7 +50,22 @@ public class Main : ICustomClass
             {
                 wManager.wManagerSetting.CurrentSetting.CalcuCombatRange = false;
             };
-            
+
+            // HMP run away handler
+            robotManager.Events.LoggingEvents.OnAddLog += (Logging.Log log) =>
+            {
+                if (log.Text == "[HumanMasterPlugin] Starting to run away")
+                {
+                    Log("HMP's running away feature detected. Disabling FightClass");
+                    HMPrunningAway = true;
+                }
+                else if (log.Text == "[HumanMasterPlugin] Stop fleeing, allow attacks again")
+                {
+                    Log("Reenabling FightClass");
+                    HMPrunningAway = false;
+                }
+            };
+
             if (!Talents._isRunning)
             {
                 _talentThread.DoWork += Talents.DoTalentPulse;

@@ -113,7 +113,7 @@ public static class Rogue
         {
             try
             {
-                if (!Products.InPause && !ObjectManager.Me.IsDeadMe)
+                if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     // Buff rotation
                     if (ObjectManager.GetNumberAttackPlayer() < 1)

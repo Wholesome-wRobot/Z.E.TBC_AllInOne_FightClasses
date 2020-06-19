@@ -105,7 +105,7 @@ public static class Hunter
             try
             {
                 if (Conditions.InGameAndConnectedAndProductStartedNotInPause && !Me.IsOnTaxi && Me.IsAlive
-                    && ObjectManager.Pet.IsValid)
+                    && ObjectManager.Pet.IsValid && !Main.HMPrunningAway)
                 {
                     // Pet Growl
                     if (ObjectManager.Target.Target == Me.Guid && Me.InCombatFlagOnly && !_settings.AutoGrowl
@@ -136,7 +136,7 @@ public static class Hunter
 		{
 			try
 			{
-				if (!Products.InPause && !Me.IsDeadMe)
+				if (!Products.InPause && !Me.IsDeadMe && !Main.HMPrunningAway)
 				{
                     Main.settingRange = _canOnlyMelee ? 4.5f : 30f;
                     PetManager();

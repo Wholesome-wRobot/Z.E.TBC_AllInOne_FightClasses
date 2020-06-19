@@ -64,7 +64,7 @@ public static class Priest
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe)
+				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     if (Main.settingRange != _meleeRange)
                         Main.settingRange = _goInMFRange ? 17f : _maxRange - 2;

@@ -78,7 +78,7 @@ public static class Shaman
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe)
+				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     Main.settingRange = _goInMelee ? 5f : _pullRange;
                     CheckEnchantWeapon();

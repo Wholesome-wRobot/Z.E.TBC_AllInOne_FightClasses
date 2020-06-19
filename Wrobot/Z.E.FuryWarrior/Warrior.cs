@@ -54,7 +54,7 @@ public static class Warrior
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe)
+				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     // Buff rotation
                     if (!Fight.InFight && ObjectManager.GetNumberAttackPlayer() < 1)

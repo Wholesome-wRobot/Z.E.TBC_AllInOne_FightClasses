@@ -80,7 +80,7 @@ public static class Warlock
             try
             {
                 if (Conditions.InGameAndConnectedAndProductStartedNotInPause && !ObjectManager.Me.IsOnTaxi && ObjectManager.Me.IsAlive
-                    && ObjectManager.Pet.IsValid)
+                    && ObjectManager.Pet.IsValid && !Main.HMPrunningAway)
                 {
                     // Voidwalker Torment
                     if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") && ObjectManager.Target.Target == Me.Guid
@@ -103,7 +103,7 @@ public static class Warlock
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe)
+				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     if (!Me.InCombatFlagOnly)
                     {
