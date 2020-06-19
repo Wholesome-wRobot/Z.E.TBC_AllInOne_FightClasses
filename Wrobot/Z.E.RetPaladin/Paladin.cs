@@ -50,7 +50,6 @@ public static class Paladin
 		{
 			try
 			{
-                Main.Log(Main.HMPrunningAway.ToString());
 				if (!Products.InPause && !Me.IsDeadMe && !Main.HMPrunningAway)
                 {
                     BuffRotation();
