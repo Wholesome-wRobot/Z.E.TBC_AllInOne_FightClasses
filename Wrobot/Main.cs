@@ -14,7 +14,7 @@ public class Main : ICustomClass
     public static float settingRange = 5f;
     public static int _humanReflexTime = 500; 
     public static bool _isLaunched;
-    public static string version = "1.5.1"; // Must match version in Version.txt
+    public static string version = "1.5.2"; // Must match version in Version.txt
     private static bool _debug = false;
     private static bool _saveCalcuCombatRangeSetting = wManager.wManagerSetting.CurrentSetting.CalcuCombatRange;
     private static readonly BackgroundWorker _talentThread = new BackgroundWorker();
@@ -42,13 +42,14 @@ public class Main : ICustomClass
             FightEvents.OnFightEnd += (ulong guid) =>
             {
                 wManager.wManagerSetting.CurrentSetting.CalcuCombatRange = _saveCalcuCombatRangeSetting;
-                //HMPrunningAway = false;
+                HMPrunningAway = false;
             };
 
             // Fight start
             FightEvents.OnFightStart += (WoWUnit unit, CancelEventArgs cancelable) =>
             {
                 wManager.wManagerSetting.CurrentSetting.CalcuCombatRange = false;
+                HMPrunningAway = false;
             };
 
             // HMP run away handler
