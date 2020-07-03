@@ -299,12 +299,12 @@ public static class Mage
                 return;
 
         // Low level Frost Bolt
-        if (Target.GetDistance < _range && Target.HealthPercent > 15 && Me.Level < 6)
+        if (Target.GetDistance < _range && (Target.HealthPercent > 15 || Me.HealthPercent < 50) && Me.Level < 6)
             if (Cast(Frostbolt, true))
                 return;
 
         // Low level FireBall
-        if (Target.GetDistance < _range && !Frostbolt.KnownSpell && Target.HealthPercent > 15)
+        if (Target.GetDistance < _range && !Frostbolt.KnownSpell && (Target.HealthPercent > 15 || Me.HealthPercent < 50))
             if (Cast(Fireball, true))
                 return;
         
