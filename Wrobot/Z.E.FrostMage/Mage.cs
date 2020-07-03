@@ -294,17 +294,17 @@ public static class Mage
 
         // Frost Bolt
         if (Target.GetDistance < _range && Me.Level >= 6 && (Target.HealthPercent > _settings.WandThreshold
-            || ObjectManager.GetNumberAttackPlayer() > 1 || Me.HealthPercent < 30 || !_iCanUseWand))
+            || ObjectManager.GetNumberAttackPlayer() > 1 || Me.HealthPercent < 40 || !_iCanUseWand))
             if (Cast(Frostbolt, true))
                 return;
 
         // Low level Frost Bolt
-        if (Target.GetDistance < _range && Target.HealthPercent > 30 && Me.Level < 6)
+        if (Target.GetDistance < _range && Target.HealthPercent > 15 && Me.Level < 6)
             if (Cast(Frostbolt, true))
                 return;
 
         // Low level FireBall
-        if (Target.GetDistance < _range && !Frostbolt.KnownSpell && Target.HealthPercent > 30)
+        if (Target.GetDistance < _range && !Frostbolt.KnownSpell && Target.HealthPercent > 15)
             if (Cast(Fireball, true))
                 return;
         
