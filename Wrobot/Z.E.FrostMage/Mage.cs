@@ -194,13 +194,16 @@ public static class Mage
     internal static void CombatRotation()
     {
         Lua.LuaDoString("PetAttack();", false);
-        bool _hasCurse = ToolBox.HasCurseDebuff();
         WoWUnit Target = ObjectManager.Target;
         _usingWand = Lua.LuaDoString<bool>("isAutoRepeat = false; local name = GetSpellInfo(5019); " +
             "if IsAutoRepeatSpell(name) then isAutoRepeat = true end", "isAutoRepeat");
 
+        // Stop wand use on multipull
+        if (_iCanUseWand && ObjectManager.GetNumberAttackPlayer() > 1)
+            _iCanUseWand = false;
+
         // Remove Curse
-        if (_hasCurse)
+        if (ToolBox.HasCurseDebuff())
         {
             Thread.Sleep(Main._humanReflexTime);
             if (Cast(RemoveCurse))
@@ -249,7 +252,7 @@ public static class Mage
                 return;
 
         // Mana Shield
-        if (!Me.HaveBuff("Mana Shield") && Me.HealthPercent < 30 && Me.ManaPercentage > 50)
+        if (!Me.HaveBuff("Mana Shield") && ((Me.HealthPercent < 30 && Me.ManaPercentage > 50) || Me.HealthPercent < 10))
             if (Cast(ManaShield))
                 return;
 
@@ -283,7 +286,8 @@ public static class Mage
                 return;
 
         // Fire Blast
-        if (Target.GetDistance < 20f && Target.HealthPercent > 30f)
+        if (Target.GetDistance < 20f && Target.HealthPercent <= _settings.FireblastThreshold 
+            && !Target.HaveBuff("Frostbite") && !Target.HaveBuff("Frost Nova"))
             if (Cast(FireBlast))
                 return;
 

@@ -22,6 +22,7 @@ public class ZEMageSettings : Settings
         IcyVeinMultiPull = true;
         BlinkWhenBackup = true;
         ActivateCombatDebug = false;
+        FireblastThreshold = 30;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCMage "
@@ -62,8 +63,14 @@ public class ZEMageSettings : Settings
     [Category("Combat Rotation")]
     [DefaultValue(30)]
     [DisplayName("Wand Threshold")]
-    [Description("Enemy HP under which the wand should be used")]
+    [Description("Enemy HP % under which the wand should be used")]
     public int WandThreshold { get; set; }
+
+    [Category("Combat Rotation")]
+    [DefaultValue(30)]
+    [DisplayName("Fire Blast Threshold")]
+    [Description("Enemy HP % under which Fire Blast should be used")]
+    public int FireblastThreshold { get; set; }
 
     [Category("Combat Rotation")]
     [DefaultValue(true)]
