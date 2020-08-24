@@ -25,24 +25,24 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>E:\WoW\WoW TBC\WRobot\WRobot\FightClass\</OutputPath>
+    <OutputPath>D:\WoW\WoW TBC\WRobot\WRobot\FightClass\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MemoryRobot">
-      <HintPath>E:\WoW\WoW TBC\WRobot\WRobot\Bin\MemoryRobot.dll</HintPath>
+      <HintPath>D:\WoW\WoW TBC\WRobot\WRobot\Bin\MemoryRobot.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="robotManager">
-      <HintPath>E:\WoW\WoW TBC\WRobot\WRobot\Bin\robotManager.dll</HintPath>
+      <HintPath>D:\WoW\WoW TBC\WRobot\WRobot\Bin\robotManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="wManager">
-      <HintPath>E:\WoW\WoW TBC\WRobot\WRobot\Bin\wManager.dll</HintPath>
+      <HintPath>D:\WoW\WoW TBC\WRobot\WRobot\Bin\wManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

@@ -101,7 +101,7 @@ public static class Priest
                     return;
 
             // OOC Renew
-            if (Me.HealthPercent < 60 && !Me.HaveBuff("Renew"))
+            if (Me.HealthPercent < 70 && !Me.HaveBuff("Renew"))
                 if (Cast(Renew))
                     return;
 
@@ -278,13 +278,13 @@ public static class Priest
                 return;
 
         // Power Word Shield
-        if (Me.HealthPercent < 60 && !Me.HaveBuff("Power Word: Shield") 
+        if (Me.HealthPercent < 50 && !Me.HaveBuff("Power Word: Shield") 
             && !_hasWeakenedSoul && _settings.UsePowerWordShield)
             if (Cast(PowerWordShield))
                 return;
 
         // Renew
-        if (Me.HealthPercent < 90 && !Me.HaveBuff("Renew") && !_inShadowForm
+        if (Me.HealthPercent < 70 && !Me.HaveBuff("Renew") && !_inShadowForm
              && (Target.HealthPercent > 15 || Me.HealthPercent < 25))
             if (Cast(Renew))
                 return;
