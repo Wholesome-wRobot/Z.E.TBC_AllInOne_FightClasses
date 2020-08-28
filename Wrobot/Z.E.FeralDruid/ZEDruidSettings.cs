@@ -27,6 +27,8 @@ public class ZEDruidSettings : Settings
         UseInnervate = true;
         CatFormOOC = true;
         ActivateCombatDebug = false;
+        BearFormOnMultiAggro = true;
+        NumberOfAttackersBearForm = 2;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCDruid "
@@ -87,6 +89,18 @@ public class ZEDruidSettings : Settings
     [DisplayName("Use Barkskin")]
     [Description("Use Barkskin before healing in dangerous situations")]
     public bool UseBarkskin { get; set; }
+
+    [Category("Bear Form")]
+    [DefaultValue(true)]
+    [DisplayName("Bear form on multi aggro")]
+    [Description("Enable/Disable Bear form on multi aggro")]
+    public bool BearFormOnMultiAggro { get; set; }
+
+    [Category("Bear Form")]
+    [DefaultValue(2)]
+    [DisplayName("Number of attackers")]
+    [Description("Bear Form when the number of enemies attacking you is superior or equal to this value.")]
+    public int NumberOfAttackersBearForm { get; set; }
 
     [Category("Bear Form")]
     [DefaultValue(true)]

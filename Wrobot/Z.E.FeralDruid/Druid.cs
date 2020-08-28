@@ -238,7 +238,8 @@ public static class Druid
                 return;
 
         // Melee ?
-        if (_pullMeleeTimer.ElapsedMilliseconds <= 0 && ObjectManager.Target.GetDistance <= _pullRange)
+        if (_pullMeleeTimer.ElapsedMilliseconds <= 0 
+            && ObjectManager.Target.GetDistance <= _pullRange)
             _pullMeleeTimer.Start();
 
         if (_pullMeleeTimer.ElapsedMilliseconds > 5000)
@@ -259,13 +260,19 @@ public static class Druid
                 return;
 
         // Prowl
-        if (Me.HaveBuff("Cat Form") && !_pullFromAfar && ObjectManager.Target.GetDistance > 15f && ObjectManager.Target.GetDistance < 25f
+        if (Me.HaveBuff("Cat Form") 
+            && !_pullFromAfar 
+            && ObjectManager.Target.GetDistance > 15f 
+            && ObjectManager.Target.GetDistance < 25f
             && _settings.StealthEngage)
             if (Cast(Prowl))
                 return;
 
         // Pull Bear/Cat
-        if (Me.HaveBuff("Bear Form") || Me.HaveBuff("Dire Bear Form") || Me.HaveBuff("Cat Form") || !_pullFromAfar)
+        if (Me.HaveBuff("Bear Form") 
+            || Me.HaveBuff("Dire Bear Form") 
+            || Me.HaveBuff("Cat Form") 
+            || !_pullFromAfar)
         {
             Main.settingRange = _meleRange;
 
@@ -386,16 +393,29 @@ public static class Druid
                 return;
 
         // Bear Form
-        if (!Me.HaveBuff("Bear Form") && !Me.HaveBuff("Dire Bear Form") 
-            && (!CatForm.KnownSpell || ObjectManager.GetNumberAttackPlayer() > 1))
-            if (Cast(DireBearForm) || Cast(BearForm))
-                return;
+        if (!Me.HaveBuff("Bear Form") && !Me.HaveBuff("Dire Bear Form"))
+        {
+            if (!CatForm.KnownSpell)
+            {
+                if (Cast(DireBearForm) || Cast(BearForm))
+                    return;
+            }
+            else if (ObjectManager.GetNumberAttackPlayer() >= _settings.NumberOfAttackersBearForm
+                    && _settings.BearFormOnMultiAggro)
+            {
+                {
+                    if (Cast(DireBearForm) || Cast(BearForm))
+                        return;
+                }
+            }
+        }
+
 
         #region Cat Form Rotation
 
-        // **************** CAT FORM ROTATION ****************
+            // **************** CAT FORM ROTATION ****************
 
-        if (Me.HaveBuff("Cat Form"))
+            if (Me.HaveBuff("Cat Form"))
         {
             Main.settingRange = _meleRange;
             

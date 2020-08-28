@@ -325,7 +325,10 @@ public static class Warrior
                 return;
 
         // Hamstring
-        if (Target.CreatureTypeTarget == "Humanoid" && _inMeleeRange && _settings.UseHamstring && Target.HealthPercent < 40
+        if ((Target.CreatureTypeTarget == "Humanoid" || Target.Name.Contains("Plainstrider"))
+            && _inMeleeRange 
+            && _settings.UseHamstring
+            && Target.HealthPercent < 40
             && !Target.HaveBuff("Hamstring"))
             if (Cast(Hamstring))
                 return;
