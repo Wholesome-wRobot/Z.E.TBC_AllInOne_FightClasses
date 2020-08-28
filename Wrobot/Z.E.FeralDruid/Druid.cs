@@ -401,7 +401,8 @@ public static class Druid
                     return;
             }
             else if (ObjectManager.GetNumberAttackPlayer() >= _settings.NumberOfAttackersBearForm
-                    && _settings.BearFormOnMultiAggro)
+                    && _settings.BearFormOnMultiAggro
+                    && _settings.NumberOfAttackersBearForm > 1)
             {
                 {
                     if (Cast(DireBearForm) || Cast(BearForm))
