@@ -66,31 +66,54 @@ public static class Hunter
 
         FightEvents.OnFightLoop += (WoWUnit unit, CancelEventArgs cancelable) =>
         {
-            if (ObjectManager.Target.GetDistance < 13f && ObjectManager.Target.IsTargetingMyPet && _backupAttempts < _settings.MaxBackupAttempts
-            && !MovementManager.InMovement && Me.IsAlive && !ObjectManager.Pet.HaveBuff("Pacifying Dust") && !_canOnlyMelee
-            && !ObjectManager.Pet.IsStunned && !_isBackingUp && !Me.IsCast && _settings.BackupFromMelee)
+            // Do we need to backup?
+            if (ObjectManager.Target.GetDistance < 10f && ObjectManager.Target.IsTargetingMyPet
+            && !MovementManager.InMovement  && Me.IsAlive 
+            && !ObjectManager.Pet.HaveBuff("Pacifying Dust")  && !_canOnlyMelee
+            && !ObjectManager.Pet.IsStunned  && !_isBackingUp 
+            && !Me.IsCast  && _settings.BackupFromMelee)
             {
-                _isBackingUp = true;
-                var pos = 1;
-                if (ObjectManager.Me.IsAlive && ObjectManager.Target.IsAlive && pos == 1)
+                // Stop trying if we reached the max amount of attempts
+                if (_backupAttempts >= _settings.MaxBackupAttempts)
                 {
-                    Vector3 position = ToolBox.BackofVector3(Me.Position, Me, 20f);
-                    MovementManager.Go(PathFinder.FindPath(position), false);
-                    
-                    while (MovementManager.InMovement && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
-                    && ObjectManager.Target.GetDistance < 13f && _backupAttempts < _settings.MaxBackupAttempts && !_canOnlyMelee)
+                    Main.Log($"Backup failed after {_backupAttempts} attempts. Going in melee");
+                    _canOnlyMelee = true;
+                    return;
+                }
+
+                // Using CTM
+                if (_settings.BackupUsingCTM)
+                {
+                    // Backup code
+                    _isBackingUp = true;
+                    if (ObjectManager.Me.IsAlive && ObjectManager.Target.IsAlive)
                     {
-                        // Wait follow path
-                        Thread.Sleep(2000);
-                        pos = 0;
-                        _backupAttempts++;
+                        Vector3 position = ToolBox.BackofVector3(Me.Position, Me, 12f);
+                        MovementManager.Go(PathFinder.FindPath(position), false);
+                        Thread.Sleep(500);
+                        int limiter = 0;
+                        // Backup loop
+                        while (MovementManager.InMoveTo && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
+                        && ObjectManager.Target.GetDistance < 10f && _backupAttempts < _settings.MaxBackupAttempts 
+                        && !_canOnlyMelee && limiter < 10)
+                        {
+                            // Wait follow path
+                            Thread.Sleep(300);
+                            limiter++;
+                        }
                     }
                 }
-                ReenableAutoshot();
-                Main.LogDebug("Backup attempt : " + _backupAttempts);
+                // Using Keyboard
+                else
+                {
+                    Move.Backward(Move.MoveAction.PressKey, 1500);
+                }
+
+                _backupAttempts++;
+                Main.Log("Backup attempt : " + _backupAttempts);
                 _isBackingUp = false;
-                if (_backupAttempts >= _settings.MaxBackupAttempts)
-                    _canOnlyMelee = true;
+
+                ReenableAutoshot();
             }
         };
 

@@ -26,6 +26,7 @@ public class ZEBMHunterSettings : Settings
         RapidFireOnMulti = false;
         AutoGrowl = false;
         ActivateCombatDebug = false;
+        BackupUsingCTM = true;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCHunter "
@@ -68,6 +69,12 @@ public class ZEBMHunterSettings : Settings
     [DisplayName("Backup from melee")]
     [Description("Set to True is you want to backup from melee range when your pet has gained aggro")]
     public bool BackupFromMelee { get; set; }
+
+    [Category("Combat Rotation")]
+    [DefaultValue(true)]
+    [DisplayName("Backup using CTM")]
+    [Description("If set to True, will backup using Click To Move. If false, will use the keyboard")]
+    public bool BackupUsingCTM { get; set; }
 
     [Category("Combat Rotation")]
     [DefaultValue(true)]
