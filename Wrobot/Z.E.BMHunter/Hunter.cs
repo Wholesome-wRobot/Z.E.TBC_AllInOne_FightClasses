@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Threading;
 using robotManager.Helpful;
 using robotManager.Products;
@@ -62,7 +61,9 @@ public static class Hunter
         {
             // Do we need to backup?
             if (ObjectManager.Target.GetDistance < 10f && ObjectManager.Target.IsTargetingMyPet
-            && !MovementManager.InMovement  && Me.IsAlive 
+            && !MovementManager.InMovement
+            && Me.IsAlive 
+            && ObjectManager.Target.IsAlive
             && !ObjectManager.Pet.HaveBuff("Pacifying Dust")  && !_canOnlyMelee
             && !ObjectManager.Pet.IsStunned  && !_isBackingUp 
             && !Me.IsCast  && _settings.BackupFromMelee)
@@ -75,28 +76,26 @@ public static class Hunter
                     return;
                 }
 
+                _isBackingUp = true;
+
                 // Using CTM
                 if (_settings.BackupUsingCTM)
                 {
-                    // Backup code
-                    _isBackingUp = true;
-                    if (ObjectManager.Me.IsAlive && ObjectManager.Target.IsAlive)
+                    Vector3 position = ToolBox.BackofVector3(Me.Position, Me, 12f);
+                    MovementManager.Go(PathFinder.FindPath(position), false);
+                    Thread.Sleep(500);
+
+                    // Backup loop
+                    int limiter = 0;
+                    while (MovementManager.InMoveTo 
+                    && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
+                    && ObjectManager.Me.IsAlive
+                    && ObjectManager.Target.GetDistance < 10f
+                    && limiter < 10)
                     {
-                        Vector3 position = ToolBox.BackofVector3(Me.Position, Me, 12f);
-                        MovementManager.Go(PathFinder.FindPath(position), false);
-                        Thread.Sleep(500);
-                        int limiter = 0;
-                        // Backup loop
-                        while (MovementManager.InMoveTo 
-                        && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
-                        && ObjectManager.Me.IsAlive
-                        && ObjectManager.Target.GetDistance < 10f
-                        && limiter < 10)
-                        {
-                            // Wait follow path
-                            Thread.Sleep(300);
-                            limiter++;
-                        }
+                        // Wait follow path
+                        Thread.Sleep(300);
+                        limiter++;
                     }
                 }
                 // Using Keyboard
@@ -108,8 +107,8 @@ public static class Hunter
                     && ObjectManager.Target.GetDistance < 10f
                     && limiter <= 6)
                     {
+                        Move.Backward(Move.MoveAction.PressKey, 500);
                         limiter++;
-                        Main.Log(limiter.ToString());
                     }
                 }
 

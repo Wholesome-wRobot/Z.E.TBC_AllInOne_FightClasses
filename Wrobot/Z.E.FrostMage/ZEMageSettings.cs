@@ -23,6 +23,7 @@ public class ZEMageSettings : Settings
         BlinkWhenBackup = true;
         ActivateCombatDebug = false;
         FireblastThreshold = 30;
+        BackupUsingCTM = true;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCMage "
@@ -83,6 +84,12 @@ public class ZEMageSettings : Settings
     [DisplayName("Blink when backing up")]
     [Description("Use Blink when backing up from the target")]
     public bool BlinkWhenBackup { get; set; }
+
+    [Category("Combat Rotation")]
+    [DefaultValue(true)]
+    [DisplayName("Backup using CTM")]
+    [Description("If set to True, will backup using Click To Move. If false, will use the keyboard")]
+    public bool BackupUsingCTM { get; set; }
 
     [Category("Misc")]
     [DefaultValue(false)]

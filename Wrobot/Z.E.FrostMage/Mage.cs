@@ -46,32 +46,56 @@ public static class Mage
         // Fight Loop
         FightEvents.OnFightLoop += (WoWUnit unit, CancelEventArgs cancelable) =>
         {
-            bool condition = ((ObjectManager.Target.HaveBuff("Frostbite") || ObjectManager.Target.HaveBuff("Frost Nova")) &&
-                ObjectManager.Target.IsAlive && ObjectManager.Target.GetDistance < _meleeRange + 4 && !Me.IsCast && !_isBackingUp
-                && ObjectManager.Target.HealthPercent > 5 && Main.settingRange != _meleeRange);
-            if (condition)
+            // Do we need to backup?
+            if ((ObjectManager.Target.HaveBuff("Frostbite") || ObjectManager.Target.HaveBuff("Frost Nova"))
+            && ObjectManager.Target.GetDistance < 10f
+            && Me.IsAlive 
+            && ObjectManager.Target.IsAlive
+            && !_isBackingUp
+            && !Me.IsCast
+            && Main.settingRange != _meleeRange
+            && ObjectManager.Target.HealthPercent > 5)
             {
-                Main.LogDebug("Backing up");
                 _isBackingUp = true;
-                var pos = 1;
-                if (Me.IsAlive && ObjectManager.Target.IsAlive && pos == 1)
+                int limiter = 0;
+
+                // Using CTM
+                if (_settings.BackupUsingCTM)
                 {
                     Vector3 position = ToolBox.BackofVector3(Me.Position, Me, 15f);
                     MovementManager.Go(PathFinder.FindPath(position), false);
+                    Thread.Sleep(500);
 
-                    while (MovementManager.InMovement && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
-                    && ObjectManager.Target.GetDistance < 10f && ObjectManager.Target.IsAlive
-                    && (ObjectManager.Target.HaveBuff("Frostbite") || ObjectManager.Target.HaveBuff("Frost Nova")))
+                    // Backup loop
+                    while (MovementManager.InMoveTo
+                    && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
+                    && ObjectManager.Target.GetDistance < 10f
+                    && ObjectManager.Me.IsAlive
+                    && ObjectManager.Target.IsAlive
+                    && (ObjectManager.Target.HaveBuff("Frostbite") || ObjectManager.Target.HaveBuff("Frost Nova"))
+                    && limiter < 10)
                     {
                         // Wait follow path
-                        Thread.Sleep(200);
+                        Thread.Sleep(300);
+                        limiter++;
                         if (_settings.BlinkWhenBackup)
-                            if (Cast(Blink))
-                                Main.LogDebug("Blink away");
-                        pos = 0;
+                            Cast(Blink);
                     }
-                    _isBackingUp = false;
                 }
+                // Using Keyboard
+                else
+                {
+                    while (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
+                    && ObjectManager.Me.IsAlive
+                    && ObjectManager.Target.IsAlive
+                    && ObjectManager.Target.GetDistance < 10f
+                    && limiter <= 6)
+                    {
+                        Move.Backward(Move.MoveAction.PressKey, 500);
+                        limiter++;
+                    }
+                }
+                _isBackingUp = false;
             }
         };
 
@@ -105,7 +129,11 @@ public static class Mage
                     if (!Fight.InFight && !ObjectManager.Me.InCombatFlagOnly && !Me.IsMounted)
                         BuffRotation();
 
-                    if (Fight.InFight && ObjectManager.Me.Target > 0UL && ObjectManager.Target.IsAttackable && ObjectManager.Target.IsAlive)
+                    if (Fight.InFight 
+                        && ObjectManager.Me.Target > 0UL 
+                        && ObjectManager.Target.IsAttackable 
+                        && ObjectManager.Target.IsAlive
+                        && !_isBackingUp)
                     {
                         if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
