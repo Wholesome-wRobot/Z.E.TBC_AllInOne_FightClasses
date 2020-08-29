@@ -11,11 +11,9 @@ using System.Collections.Generic;
 using wManager.Wow.Bot.Tasks;
 using System.ComponentModel;
 using System.Linq;
-using robotManager.FiniteStateMachine;
 
 public static class Rogue
 {
-    private static float _meleRange = Main.settingRange;
     private static float _pullRange = 25f;
     internal static Stopwatch _pullMeleeTimer = new Stopwatch();
     internal static Stopwatch _meleeTimer = new Stopwatch();
@@ -34,6 +32,7 @@ public static class Rogue
     public static void Initialize()
     {
         Main.Log("Initialized");
+        Main.SetRangeToMelee();
         ZERogueSettings.Load();
         _settings = ZERogueSettings.CurrentSetting;
         Talents.InitTalents(_settings.AssignTalents, _settings.UseDefaultTalents, _settings.TalentCodes);
@@ -48,7 +47,7 @@ public static class Rogue
             _pullFromAfar = false;
             _isStealthApproching = false;
             _myBestBandage = null;
-            Main.settingRange = _meleRange;
+            Main.SetRangeToMelee();
         };
 
         // Fight Start
@@ -190,7 +189,7 @@ public static class Rogue
                 if (Me.IsMounted)
                     MountTask.DismountMount();
 
-                Main.settingRange = _pullRange;
+                Main.SetRange(_pullRange);
                 if (Cast(pullMethod))
                     Thread.Sleep(2000);
             }
@@ -203,7 +202,7 @@ public static class Rogue
         if (_pullMeleeTimer.ElapsedMilliseconds > 5000)
         {
             Main.LogDebug("Going in Melee range");
-            Main.settingRange = _meleRange;
+            Main.SetRangeToMelee();
             _pullMeleeTimer.Reset();
         }
 
@@ -226,7 +225,7 @@ public static class Rogue
         // Stealth approach
         if (Me.HaveBuff("Stealth") && ObjectManager.Target.GetDistance > 3f && !_isStealthApproching && !_pullFromAfar)
         {
-            Main.settingRange = _meleRange;
+            Main.SetRangeToMelee();
             _stealthApproachTimer.Start();
             _isStealthApproching = true;
             if (ObjectManager.Me.IsAlive && ObjectManager.Target.IsAlive)
@@ -325,21 +324,13 @@ public static class Rogue
         if (_meleeTimer.ElapsedMilliseconds <= 0 && _pullFromAfar)
             _meleeTimer.Start();
 
-        if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 5000) && Main.settingRange != _meleRange)
+        if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 5000) 
+            && !Main.CurrentRangeIsMelee())
         {
             Main.LogDebug("Going in Melee range 2");
-            Main.settingRange = _meleRange;
+            Main.SetRangeToMelee();
             _meleeTimer.Stop();
         }
-        
-        // Vanish
-        /*if (Me.HealthPercent < 10)
-            if (Cast(Vanish))
-            {
-                Main.Log("Stopping Fight after vanish");
-                Fight.StopFight();
-                return;
-            }*/
 
         // Kick interrupt
         if (_shouldBeInterrupted)

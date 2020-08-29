@@ -9,11 +9,13 @@ using System.ComponentModel;
 
 public class Main : ICustomClass
 {
+    public static readonly float DefaultMeleeRange = 5f;
+    private static float _settingRange = DefaultMeleeRange;
+
     public static string wowClass = ObjectManager.Me.WowClass.ToString();
-    public static float settingRange = 5f;
     public static int _humanReflexTime = 500; 
     public static bool _isLaunched;
-    public static string version = "1.5.9"; // Must match version in Version.txt
+    public static string version = "1.5.91"; // Must match version in Version.txt
     private static bool _debug = false;
     private static bool _saveCalcuCombatRangeSetting = wManager.wManagerSetting.CurrentSetting.CalcuCombatRange;
     private static readonly BackgroundWorker _talentThread = new BackgroundWorker();
@@ -22,7 +24,7 @@ public class Main : ICustomClass
 
     public float Range
 	{
-		get { return settingRange; }
+		get { return _settingRange; }
     }
 
     public void Initialize()
@@ -132,5 +134,35 @@ public class Main : ICustomClass
     public static void CombatDebug(string message)
     {
         Logging.Write($"[Wholesome-FC-TBC - {wowClass}]: { message}", Logging.LogType.Normal, Color.Plum);
+    }
+
+    public static void SetRange(float range)
+    {
+        if (range != _settingRange)
+        {
+            _settingRange = range;
+            Log($"Range set to {_settingRange}");
+        }
+    }
+
+    public static void SetRangeToMelee()
+    {
+        if (ObjectManager.Target != null)
+            SetRange(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 2));
+        else
+            SetRange(DefaultMeleeRange);
+    }
+
+    public static bool CurrentRangeIsMelee()
+    {
+        if (ObjectManager.Target != null)
+            return GetRange() == DefaultMeleeRange + (ObjectManager.Target.CombatReach / 2);
+        else
+            return GetRange() == DefaultMeleeRange;
+    }
+
+    public static float GetRange()
+    {
+        return _settingRange;
     }
 }

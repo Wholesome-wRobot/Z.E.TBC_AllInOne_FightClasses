@@ -80,7 +80,11 @@ public static class Shaman
 			{
 				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
-                    Main.settingRange = _goInMelee ? 5f : _pullRange;
+                    if (_goInMelee)
+                        Main.SetRangeToMelee();
+                    else
+                        Main.SetRange(_pullRange);
+
                     CheckEnchantWeapon();
                     totemManager.CheckForTotemicCall();
 

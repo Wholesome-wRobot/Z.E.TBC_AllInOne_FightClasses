@@ -15,7 +15,6 @@ public static class Warlock
 {
     private static WoWLocalPlayer Me = ObjectManager.Me;
     private static float _maxRange = 27f;
-    private static float _meleeRange = 27f;
     private static bool _usingWand = false;
     private static int _innerManaSaveThreshold = 20;
     private static bool _iCanUseWand = ToolBox.HaveRangedWeaponEquipped();
@@ -31,7 +30,7 @@ public static class Warlock
         _settings = ZEWarlockSettings.CurrentSetting;
         Talents.InitTalents(_settings.AssignTalents, _settings.UseDefaultTalents, _settings.TalentCodes);
 
-        Main.settingRange = _maxRange;
+        Main.SetRange(_maxRange);
         _petPulseThread.DoWork += PetThread;
         _petPulseThread.RunWorkerAsync();
 
@@ -46,7 +45,7 @@ public static class Warlock
         {
             _usingWand = false;
             _iCanUseWand = false;
-            Main.settingRange = _maxRange;
+            Main.SetRange(_maxRange);
             _addCheckTimer.Reset();
             if (_settings.PetInPassiveWhenOOC)
                 Lua.LuaDoString("PetPassiveMode();");
@@ -498,7 +497,7 @@ public static class Warlock
         // Health Funnel
         if (ObjectManager.Pet.IsValid && ObjectManager.Pet.HealthPercent < 30 && Me.HealthPercent > 30)
         {
-            Main.settingRange = 19f;
+            Main.SetRange(19f);
             if (HealthFunnel.IsDistanceGood && Cast(HealthFunnel))
                 return;
         }
@@ -534,18 +533,22 @@ public static class Warlock
                 return;
 
         // Use Wand
-        if (!_usingWand && _iCanUseWand && ObjectManager.Target.GetDistance <= _maxRange + 2)
+        if (!_usingWand 
+            && _iCanUseWand 
+            && ObjectManager.Target.GetDistance <= _maxRange + 2)
         {
-            Main.settingRange = _maxRange;
+            Main.SetRange(_maxRange);
             if (Cast(UseWand, false))
                 return;
         }
 
         // Go in melee because nothing else to do
-        if (!_usingWand && !UseWand.IsSpellUsable && Main.settingRange != _meleeRange && Target.IsAlive)
+        if (!_usingWand && !UseWand.IsSpellUsable 
+            && !Main.CurrentRangeIsMelee()
+            && Target.IsAlive)
         {
             Main.Log("Going in melee");
-            Main.settingRange = _meleeRange;
+            Main.SetRangeToMelee();
             return;
         }
     }

@@ -13,8 +13,7 @@ using wManager.Wow.ObjectManager;
 public static class Priest
 {
     private static WoWLocalPlayer Me = ObjectManager.Me;
-    private static float _maxRange = 28f;
-    private static float _meleeRange = 5f;
+    private static float _distaneRange = 28f;
     private static bool _usingWand = false;
     private static bool _iCanUseWand = ToolBox.HaveRangedWeaponEquipped();
     private static int _innerManaSaveThreshold = 20;
@@ -30,7 +29,7 @@ public static class Priest
         _settings = ZEPriestSettings.CurrentSetting;
         Talents.InitTalents(_settings.AssignTalents, _settings.UseDefaultTalents, _settings.TalentCodes);
         _wandThreshold = _settings.WandThreshold > 100 ? 50 : _settings.WandThreshold;
-        Main.settingRange = _maxRange;
+        Main.SetRange(_distaneRange);
 
         // Fight end
         FightEvents.OnFightEnd += (ulong guid) =>
@@ -39,7 +38,7 @@ public static class Priest
             _goInMFRange = false;
             _dispelTimer.Reset();
             _iCanUseWand = false;
-            Main.settingRange = _maxRange;
+            Main.SetRange(_distaneRange);
         };
 
         // Fight start
@@ -66,8 +65,14 @@ public static class Priest
 			{
 				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
-                    if (Main.settingRange != _meleeRange)
-                        Main.settingRange = _goInMFRange ? 17f : _maxRange - 2;
+                    if (!Main.CurrentRangeIsMelee())
+                    {
+                        if (_goInMFRange)
+                            Main.SetRange(17f);
+                        else
+                            Main.SetRange(_distaneRange - 2);
+                    }
+
                     if (!Fight.InFight)
                     {
                         BuffRotation();
@@ -195,32 +200,32 @@ public static class Priest
                 return;
 
         // Vampiric Touch
-        if (Me.HaveBuff("ShadowForm") && ObjectManager.Target.GetDistance <= _maxRange 
+        if (Me.HaveBuff("ShadowForm") && ObjectManager.Target.GetDistance <= _distaneRange 
             && !ObjectManager.Target.HaveBuff("Vampiric Touch"))
             if (Cast(VampiricTouch))
                 return;
 
         // MindBlast
-        if (Me.HaveBuff("ShadowForm") && ObjectManager.Target.GetDistance <= _maxRange
+        if (Me.HaveBuff("ShadowForm") && ObjectManager.Target.GetDistance <= _distaneRange
             && !VampiricTouch.KnownSpell)
             if (Cast(MindBlast))
                 return;
 
         // Shadow Word Pain
-        if (Me.HaveBuff("ShadowForm") && ObjectManager.Target.GetDistance <= _maxRange 
+        if (Me.HaveBuff("ShadowForm") && ObjectManager.Target.GetDistance <= _distaneRange 
             && (!MindBlast.KnownSpell || !MindBlast.IsSpellUsable)
             && !ObjectManager.Target.HaveBuff("Shadow Word: Pain"))
             if (Cast(ShadowWordPain))
                 return;
 
         // Holy Fire
-        if (ObjectManager.Target.GetDistance <= _maxRange && HolyFire.KnownSpell 
+        if (ObjectManager.Target.GetDistance <= _distaneRange && HolyFire.KnownSpell 
             && HolyFire.IsSpellUsable && !Me.HaveBuff("ShadowForm"))
             if (Cast(HolyFire))
                 return;
 
         // Smite
-        if (ObjectManager.Target.GetDistance <= _maxRange && Smite.KnownSpell 
+        if (ObjectManager.Target.GetDistance <= _distaneRange && Smite.KnownSpell 
             && !HolyFire.KnownSpell && Smite.IsSpellUsable && !Me.HaveBuff("ShadowForm"))
             if (Cast(Smite, false))
                 return;
@@ -340,7 +345,7 @@ public static class Priest
         }
 
         // Vampiric Touch
-        if (Target.GetDistance <= _maxRange && !Target.HaveBuff("Vampiric Touch") 
+        if (Target.GetDistance <= _distaneRange && !Target.HaveBuff("Vampiric Touch") 
             && _myManaPC > _innerManaSaveThreshold && Target.HealthPercent > _wandThreshold)
             if (Cast(VampiricTouch))
                 return;
@@ -356,7 +361,7 @@ public static class Priest
                 return;
 
         // Shadow Word Pain
-        if (_myManaPC > 10 && Target.GetDistance < _maxRange && Target.HealthPercent > 15
+        if (_myManaPC > 10 && Target.GetDistance < _distaneRange && Target.HealthPercent > 15
             && !Target.HaveBuff("Shadow Word: Pain"))
             if (Cast(ShadowWordPain))
                 return;
@@ -384,13 +389,13 @@ public static class Priest
                 return;
 
         // Shadow Word Death
-            if (_myManaPC > _innerManaSaveThreshold && Target.GetDistance < _maxRange 
+            if (_myManaPC > _innerManaSaveThreshold && Target.GetDistance < _distaneRange 
             && _settings.UseShadowWordDeath && Target.HealthPercent < 15)
             if (Cast(ShadowWordDeath))
                 return;
 
         // Mind Blast + Inner Focus
-        if (!_inShadowForm && _myManaPC > _innerManaSaveThreshold && Target.GetDistance < _maxRange
+        if (!_inShadowForm && _myManaPC > _innerManaSaveThreshold && Target.GetDistance < _distaneRange
             && Target.HealthPercent > 50 && _mindBlastCD <= 0 && (Target.HealthPercent > _wandThreshold || !_iCanUseWand))
         {
             if (InnerFocus.KnownSpell && _innerFocusCD <= 0)
@@ -401,7 +406,7 @@ public static class Priest
         }
 
         // Shadow Form Mind Blast + Inner Focus
-        if (_inShadowForm && _myManaPC > _innerManaSaveThreshold && Target.GetDistance < _maxRange
+        if (_inShadowForm && _myManaPC > _innerManaSaveThreshold && Target.GetDistance < _distaneRange
             && _mindBlastCD <= 0 && Target.HealthPercent > _wandThreshold)
         {
             if (InnerFocus.KnownSpell && _innerFocusCD <= 0)
@@ -427,29 +432,32 @@ public static class Priest
 
         // Low level Smite
         if (Me.Level < 5 && (Target.HealthPercent > 30 || Me.ManaPercentage > 80) && _myManaPC > _innerManaSaveThreshold 
-            && Target.GetDistance < _maxRange)
+            && Target.GetDistance < _distaneRange)
             if (Cast(Smite, false))
                 return;
 
         // Smite
-        if (!_inShadowForm && _myManaPC > _innerManaSaveThreshold && Target.GetDistance < _maxRange
+        if (!_inShadowForm && _myManaPC > _innerManaSaveThreshold && Target.GetDistance < _distaneRange
             && Me.Level >= 5 && Target.HealthPercent > 20 && (Target.HealthPercent > _settings.WandThreshold || !_iCanUseWand))
             if (Cast(Smite, false))
                 return;
 
         // Use Wand
-        if (!_usingWand && _iCanUseWand && Target.GetDistance <= _maxRange + 2)
+        if (!_usingWand && _iCanUseWand && Target.GetDistance <= _distaneRange + 2)
         {
-            Main.settingRange = _maxRange;
+            Main.SetRange(_distaneRange);
             if (Cast(UseWand, false))
                 return;
         }
 
         // Go in melee because nothing else to do
-        if (!_usingWand && !_iCanUseWand && Main.settingRange != _meleeRange && Target.IsAlive)
+        if (!_usingWand 
+            && !_iCanUseWand 
+            && !Main.CurrentRangeIsMelee()
+            && Target.IsAlive)
         {
             Main.Log("Going in melee");
-            Main.settingRange = _meleeRange;
+            Main.SetRangeToMelee();
             return;
         }
     }

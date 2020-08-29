@@ -10,6 +10,7 @@ using wManager.Wow.ObjectManager;
 
 public static class Hunter
 {
+    private static readonly float _distanceRange = 28f;
     private static WoWLocalPlayer Me = ObjectManager.Me;
     private static HunterFoodManager _foodManager = new HunterFoodManager();
     private static readonly BackgroundWorker _petPulseThread = new BackgroundWorker();
@@ -166,7 +167,11 @@ public static class Hunter
 			{
 				if (!Products.InPause && !Me.IsDeadMe && !Main.HMPrunningAway)
 				{
-                    Main.settingRange = _canOnlyMelee ? 4.5f : 30f;
+                    if (_canOnlyMelee)
+                        Main.SetRangeToMelee();
+                    else
+                        Main.SetRange(_distanceRange);
+
                     PetManager();
 
                     // Switch Auto Growl

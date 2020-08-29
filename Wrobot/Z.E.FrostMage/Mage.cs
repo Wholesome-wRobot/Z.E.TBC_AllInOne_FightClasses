@@ -12,17 +12,17 @@ using System.Linq;
 public static class Mage
 {
     private static MageFoodManager _foodManager = new MageFoodManager();
-    private static float _meleeRange = 5f;
-    private static float _range = 28f;
+    private static float _distanceRange = 28f;
     private static bool _usingWand = false;
     private static bool _isBackingUp = false;
     private static WoWLocalPlayer Me = ObjectManager.Me;
     private static bool _iCanUseWand = ToolBox.HaveRangedWeaponEquipped();
     private static ZEMageSettings _settings;
+    private static bool _isPolymorphing;
 
     public static void Initialize()
     {
-        Main.settingRange = _range;
+        Main.SetRange(_distanceRange);
         Main.Log("Initialized.");
         ZEMageSettings.Load();
         _settings = ZEMageSettings.CurrentSetting;
@@ -34,7 +34,7 @@ public static class Mage
             _isBackingUp = false;
             _iCanUseWand = false;
             _usingWand = false;
-            Main.settingRange = _range;
+            Main.SetRange(_distanceRange);
         };
 
         // Fight start
@@ -53,8 +53,9 @@ public static class Mage
             && ObjectManager.Target.IsAlive
             && !_isBackingUp
             && !Me.IsCast
-            && Main.settingRange != _meleeRange
-            && ObjectManager.Target.HealthPercent > 5)
+            && !Main.CurrentRangeIsMelee()
+            && ObjectManager.Target.HealthPercent > 5
+            && !_isPolymorphing)
             {
                 _isBackingUp = true;
                 int limiter = 0;
@@ -69,7 +70,7 @@ public static class Mage
                     // Backup loop
                     while (MovementManager.InMoveTo
                     && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
-                    && ObjectManager.Target.GetDistance < 10f
+                    && ObjectManager.Target.GetDistance < 15f
                     && ObjectManager.Me.IsAlive
                     && ObjectManager.Target.IsAlive
                     && (ObjectManager.Target.HaveBuff("Frostbite") || ObjectManager.Target.HaveBuff("Frost Nova"))
@@ -88,7 +89,7 @@ public static class Mage
                     while (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
                     && ObjectManager.Me.IsAlive
                     && ObjectManager.Target.IsAlive
-                    && ObjectManager.Target.GetDistance < 10f
+                    && ObjectManager.Target.GetDistance < 15f
                     && limiter <= 6)
                     {
                         Move.Backward(Move.MoveAction.PressKey, 500);
@@ -97,6 +98,40 @@ public static class Mage
                 }
                 _isBackingUp = false;
             }
+            /*
+            // Polymorph
+            if (ObjectManager.GetNumberAttackPlayer() > 1 && !_isBackingUp)
+            {
+                WoWUnit firstTarget = ObjectManager.Target;
+                bool anAttackerIsPolymorphed = false;
+                WoWUnit possiblePolymorphTarget = null;
+
+                foreach (WoWUnit enemy in ObjectManager.GetUnitAttackPlayer())
+                {
+                    ObjectManager.Me.FocusGuid = enemy.DisplayId;
+                    //Main.Log(ObjectManager.Me.Focus.CreatureTypeTarget);
+                    if (enemy.HaveBuff("Polymorph"))
+                    {
+                        Main.Log($"{enemy.Name} is Polymorphed!");
+                        anAttackerIsPolymorphed = true;
+                        break;
+                    }
+                    if (enemy.CreatureTypeTarget == "Beast" 
+                    && enemy.DisplayId != firstTarget.DisplayId)
+                        possiblePolymorphTarget = enemy;
+                }
+
+                if (possiblePolymorphTarget != null
+                && !anAttackerIsPolymorphed)
+                {
+                    Interact.InteractGameObject(possiblePolymorphTarget.GetBaseAddress);
+                    Thread.Sleep(50);
+                    Cast(Polymorph);
+                }
+
+                Thread.Sleep(50);
+                Interact.InteractGameObject(firstTarget.GetBaseAddress);
+            }*/
         };
 
         Rotation();
@@ -133,7 +168,8 @@ public static class Mage
                         && ObjectManager.Me.Target > 0UL 
                         && ObjectManager.Target.IsAttackable 
                         && ObjectManager.Target.IsAlive
-                        && !_isBackingUp)
+                        && !_isBackingUp
+                        && !_isPolymorphing)
                     {
                         if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
@@ -203,18 +239,18 @@ public static class Mage
                 return;
 
         // Frost Bolt
-        if (_target.GetDistance < _range && Me.Level >= 6 && (_target.HealthPercent > _settings.WandThreshold
+        if (_target.GetDistance < _distanceRange && Me.Level >= 6 && (_target.HealthPercent > _settings.WandThreshold
             || ObjectManager.GetNumberAttackPlayer() > 1 || Me.HealthPercent < 30 || !_iCanUseWand))
             if (Cast(Frostbolt))
                 return;
 
         // Low level Frost Bolt
-        if (_target.GetDistance < _range && _target.HealthPercent > 30 && Me.Level < 6)
+        if (_target.GetDistance < _distanceRange && _target.HealthPercent > 30 && Me.Level < 6)
             if (Cast(Frostbolt))
                 return;
 
         // Low level FireBall
-        if (_target.GetDistance < _range && !Frostbolt.KnownSpell && _target.HealthPercent > 30)
+        if (_target.GetDistance < _distanceRange && !Frostbolt.KnownSpell && _target.HealthPercent > 30)
             if (Cast(Fireball))
                 return;
     }
@@ -309,50 +345,69 @@ public static class Mage
                 return;
 
         // Frost Nova
-        if (Target.GetDistance < _meleeRange + 2 && Target.HealthPercent > 10 && !Target.HaveBuff("Frostbite"))
+        if (Target.GetDistance < 8f 
+            && Target.HealthPercent > 10 
+            && !Target.HaveBuff("Frostbite"))
             if (Cast(FrostNova))
                 return;
 
         // Fire Blast
-        if (Target.GetDistance < 20f && Target.HealthPercent <= _settings.FireblastThreshold 
+        if (Target.GetDistance < 20f 
+            && Target.HealthPercent <= _settings.FireblastThreshold 
             && !Target.HaveBuff("Frostbite") && !Target.HaveBuff("Frost Nova"))
             if (Cast(FireBlast))
                 return;
 
         // Cone of Cold
-        if (Target.GetDistance < 10 && _settings.UseConeOfCold && !_isBackingUp && !MovementManager.InMovement)
+        if (Target.GetDistance < 10 
+            && _settings.UseConeOfCold 
+            && !_isBackingUp 
+            && !MovementManager.InMovement)
             if (Cast(ConeOfCold))
                 return;
 
         // Frost Bolt
-        if (Target.GetDistance < _range && Me.Level >= 6 && (Target.HealthPercent > _settings.WandThreshold
-            || ObjectManager.GetNumberAttackPlayer() > 1 || Me.HealthPercent < 40 || !_iCanUseWand))
+        if (Target.GetDistance < _distanceRange 
+            && Me.Level >= 6 
+            && (Target.HealthPercent > _settings.WandThreshold|| ObjectManager.GetNumberAttackPlayer() > 1 || Me.HealthPercent < 40 || !_iCanUseWand))
             if (Cast(Frostbolt, true))
                 return;
 
         // Low level Frost Bolt
-        if (Target.GetDistance < _range && (Target.HealthPercent > 15 || Me.HealthPercent < 50) && Me.Level < 6)
+        if (Target.GetDistance < _distanceRange 
+            && (Target.HealthPercent > 15 || Me.HealthPercent < 50) 
+            && Me.Level < 6)
             if (Cast(Frostbolt, true))
                 return;
 
         // Low level FireBall
-        if (Target.GetDistance < _range && !Frostbolt.KnownSpell && (Target.HealthPercent > 15 || Me.HealthPercent < 50))
+        if (Target.GetDistance < _distanceRange 
+            && !Frostbolt.KnownSpell 
+            && (Target.HealthPercent > 15 || Me.HealthPercent < 50))
             if (Cast(Fireball, true))
                 return;
         
         // Use Wand
-        if (!_usingWand && _iCanUseWand && ObjectManager.Target.GetDistance <= _range && !_isBackingUp && !MovementManager.InMovement)
+        if (!_usingWand 
+            && _iCanUseWand 
+            && ObjectManager.Target.GetDistance <= _distanceRange 
+            && !_isBackingUp 
+            && !MovementManager.InMovement)
         {
-            Main.settingRange = _range;
+            Main.SetRange(_distanceRange);
             if (Cast(UseWand, false))
                 return;
         }
 
         // Go in melee because nothing else to do
-        if (!_usingWand && !UseWand.IsSpellUsable && Main.settingRange != _meleeRange && !_isBackingUp && Target.IsAlive)
+        if (!_usingWand 
+            && !UseWand.IsSpellUsable 
+            && !Main.CurrentRangeIsMelee()
+            && !_isBackingUp 
+            && Target.IsAlive)
         {
             Main.Log("Going in melee");
-            Main.settingRange = _meleeRange;
+            Main.SetRangeToMelee();
             return;
         }
     }

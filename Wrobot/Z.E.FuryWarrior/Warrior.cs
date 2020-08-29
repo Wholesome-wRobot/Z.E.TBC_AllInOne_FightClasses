@@ -13,7 +13,6 @@ using System.Linq;
 
 public static class Warrior
 {
-    private static float _meleRange = Main.settingRange;
     private static float _pullRange = 25f;
     internal static Stopwatch _pullMeleeTimer = new Stopwatch();
     internal static Stopwatch _meleeTimer = new Stopwatch();
@@ -36,7 +35,7 @@ public static class Warrior
             _meleeTimer.Reset();
             _pullMeleeTimer.Reset();
             _pullFromAfar = false;
-            Main.settingRange = _meleRange;
+            Main.SetRange(Main.DefaultMeleeRange);
         };
 
         Rotation();
@@ -108,6 +107,8 @@ public static class Warrior
 
     internal static void Pull()
     {
+        Main.SetRangeToMelee();
+
         // Check if surrounding enemies
         if (ObjectManager.Target.GetDistance < _pullRange && !_pullFromAfar)
             _pullFromAfar = ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange);
@@ -138,29 +139,32 @@ public static class Warrior
                 if (Me.IsMounted)
                     MountTask.DismountMount();
 
-                Main.settingRange = _pullRange;
+                Main.SetRange(_pullRange);
                 if (Cast(pullMethod))
                     Thread.Sleep(2000);
             }
         }
 
         // Melee ?
-        if (_pullMeleeTimer.ElapsedMilliseconds <= 0 && ObjectManager.Target.GetDistance <= _pullRange + 3)
+        if (_pullMeleeTimer.ElapsedMilliseconds <= 0 
+            && ObjectManager.Target.GetDistance <= _pullRange + 3)
             _pullMeleeTimer.Start();
 
         if (_pullMeleeTimer.ElapsedMilliseconds > 5000)
         {
             Main.LogDebug("Going in Melee range");
-            Main.settingRange = _meleRange;
+            Main.SetRangeToMelee();
             _pullMeleeTimer.Reset();
         }
 
         // Check if caster in list
         if (_casterEnemies.Contains(ObjectManager.Target.Name))
             _fightingACaster = true;
-
+        
         // Charge Battle Stance
-        if (InBattleStance() && ObjectManager.Target.GetDistance > 9f && ObjectManager.Target.GetDistance < 24f 
+        if (InBattleStance() 
+            && ObjectManager.Target.GetDistance > 9f 
+            && ObjectManager.Target.GetDistance < 24f 
             && !_pullFromAfar)
             if (Cast(Charge))
                 return;
@@ -177,10 +181,12 @@ public static class Warrior
         WoWUnit Target = ObjectManager.Target;
         bool _shouldBeInterrupted = ToolBox.EnemyCasting();
         bool _inMeleeRange = Target.GetDistance < 6f;
-        bool _saveRage = ((Cleave.KnownSpell && ObjectManager.GetNumberAttackPlayer() > 1 && ToolBox.CheckIfEnemiesClose(15f)
+        bool _saveRage = (Cleave.KnownSpell 
+            && ObjectManager.GetNumberAttackPlayer() > 1 
+            && ToolBox.CheckIfEnemiesClose(15f)
             && _settings.UseCleave)
             || (Execute.KnownSpell && Target.HealthPercent < 40) 
-            || (Bloodthirst.KnownSpell && ObjectManager.Me.Rage < 40 && Target.HealthPercent > 50));
+            || (Bloodthirst.KnownSpell && ObjectManager.Me.Rage < 40 && Target.HealthPercent > 50);
 
         // Check Auto-Attacking
         ToolBox.CheckAutoAttack(Attack);
@@ -200,10 +206,11 @@ public static class Warrior
         if (_meleeTimer.ElapsedMilliseconds <= 0 && _pullFromAfar)
             _meleeTimer.Start();
 
-        if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 5000) && Main.settingRange != _meleRange)
+        if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 5000) 
+            && !Main.CurrentRangeIsMelee())
         {
             Main.LogDebug("Going in Melee range 2");
-            Main.settingRange = _meleRange;
+            Main.SetRangeToMelee();
             _meleeTimer.Stop();
         }
 
