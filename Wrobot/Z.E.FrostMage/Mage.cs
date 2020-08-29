@@ -119,6 +119,7 @@ public static class Mage
             // Polymorph
             if (_settings.UsePolymorph 
             && ObjectManager.GetNumberAttackPlayer() > 1 
+            && Polymorph.KnownSpell
             && !_isBackingUp 
             && _polymorphableEnemyInThisFight)
             {
