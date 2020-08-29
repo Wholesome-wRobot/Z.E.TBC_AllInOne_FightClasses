@@ -389,7 +389,8 @@ public static class Mage
         if (Target.GetDistance < 10 
             && _settings.UseConeOfCold 
             && !_isBackingUp 
-            && !MovementManager.InMovement)
+            && !MovementManager.InMovement
+            && _polymorphedEnemy == null)
             if (Cast(ConeOfCold))
                 return;
 
