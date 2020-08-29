@@ -58,12 +58,6 @@ public static class Hunter
             _canOnlyMelee = false;
         };
 
-        Radar3D.OnDrawEvent += () =>
-        {
-            if (ObjectManager.Me.TargetObject != null)
-                Radar3D.DrawCircle(ToolBox.BackofVector3(Me.Position, Me, 20f), 1f, Color.Cyan);
-        };
-
         FightEvents.OnFightLoop += (WoWUnit unit, CancelEventArgs cancelable) =>
         {
             // Do we need to backup?
@@ -93,9 +87,11 @@ public static class Hunter
                         Thread.Sleep(500);
                         int limiter = 0;
                         // Backup loop
-                        while (MovementManager.InMoveTo && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
-                        && ObjectManager.Target.GetDistance < 10f && _backupAttempts < _settings.MaxBackupAttempts 
-                        && !_canOnlyMelee && limiter < 10)
+                        while (MovementManager.InMoveTo 
+                        && Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
+                        && ObjectManager.Me.IsAlive
+                        && ObjectManager.Target.GetDistance < 10f
+                        && limiter < 10)
                         {
                             // Wait follow path
                             Thread.Sleep(300);
@@ -106,13 +102,24 @@ public static class Hunter
                 // Using Keyboard
                 else
                 {
-                    Move.Backward(Move.MoveAction.PressKey, 1500);
+                    int limiter = 0;
+                    while (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
+                    && ObjectManager.Me.IsAlive
+                    && ObjectManager.Target.GetDistance < 10f
+                    && limiter <= 6)
+                    {
+                        Move.Backward(Move.MoveAction.PressKey, 500);
+                        limiter++;
+                        Main.Log(limiter.ToString());
+                    }
                 }
 
                 _backupAttempts++;
-                Main.Log("Backup attempt : " + _backupAttempts);
+                Main.Log($"Backup attempt : {_backupAttempts}");
                 _isBackingUp = false;
 
+                if (RaptorStrikeOn())
+                    Cast(RaptorStrike);
                 ReenableAutoshot();
             }
         };
