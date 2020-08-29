@@ -20,6 +20,7 @@ public static class Mage
     private static ZEMageSettings _settings;
     private static bool _isPolymorphing;
     private static WoWUnit _polymorphedEnemy = null;
+    private static bool _polymorphableEnemyInThisFight = true;
 
     public static void Initialize()
     {
@@ -35,6 +36,7 @@ public static class Mage
             _isBackingUp = false;
             _iCanUseWand = false;
             _usingWand = false;
+            _polymorphableEnemyInThisFight = true;
             Main.SetRange(_distanceRange);
 
             if (!Fight.InFight && Me.InCombatFlagOnly && _polymorphedEnemy != null)
@@ -108,7 +110,10 @@ public static class Mage
             }
             
             // Polymorph
-            if (_settings.UsePolymorph && ObjectManager.GetNumberAttackPlayer() > 1 && !_isBackingUp)
+            if (_settings.UsePolymorph 
+            && ObjectManager.GetNumberAttackPlayer() > 1 
+            && !_isBackingUp 
+            && _polymorphableEnemyInThisFight)
             {
                 WoWUnit myNearbyPolymorphed = null;
                 // Detect if a polymorph cast has succeeded
@@ -135,6 +140,9 @@ public static class Mage
                             break;
                         }
                     }
+
+                    if (potentialPolymorphTarget == null)
+                        _polymorphableEnemyInThisFight = false;
 
                     // Polymorph cast
                     if (potentialPolymorphTarget != null && _polymorphedEnemy == null)
