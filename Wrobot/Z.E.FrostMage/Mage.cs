@@ -363,7 +363,7 @@ public static class Mage
                 return;
 
         // Frost Nova
-        if (Target.GetDistance < 8f 
+        if (Target.GetDistance < 7f 
             && Target.HealthPercent > 10 
             && !Target.HaveBuff("Frostbite")
             && _polymorphedEnemy == null)
@@ -413,7 +413,6 @@ public static class Mage
             && !_isBackingUp 
             && !MovementManager.InMovement)
         {
-            Main.Log("Wand");
             Main.SetRange(_distanceRange);
             if (Cast(UseWand, false))
                 return;
