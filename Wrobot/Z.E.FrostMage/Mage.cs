@@ -19,6 +19,7 @@ public static class Mage
     private static bool _iCanUseWand = ToolBox.HaveRangedWeaponEquipped();
     private static ZEMageSettings _settings;
     private static bool _isPolymorphing;
+    private static WoWUnit _polymorphedEnemy = null;
 
     public static void Initialize()
     {
@@ -35,6 +36,13 @@ public static class Mage
             _iCanUseWand = false;
             _usingWand = false;
             Main.SetRange(_distanceRange);
+
+            if (!Fight.InFight && Me.InCombatFlagOnly && _polymorphedEnemy != null)
+            {
+                Main.Log($"Starting fight with {_polymorphedEnemy.Name} (polymorphed)");
+                Fight.StartFight(_polymorphedEnemy.Guid);
+                _polymorphedEnemy = null;
+            }
         };
 
         // Fight start
@@ -98,40 +106,50 @@ public static class Mage
                 }
                 _isBackingUp = false;
             }
-            /*
+            
             // Polymorph
-            if (ObjectManager.GetNumberAttackPlayer() > 1 && !_isBackingUp)
+            if (_settings.UsePolymorph && ObjectManager.GetNumberAttackPlayer() > 1 && !_isBackingUp)
             {
-                WoWUnit firstTarget = ObjectManager.Target;
-                bool anAttackerIsPolymorphed = false;
-                WoWUnit possiblePolymorphTarget = null;
-
-                foreach (WoWUnit enemy in ObjectManager.GetUnitAttackPlayer())
+                WoWUnit myNearbyPolymorphed = null;
+                // Detect if a polymorph cast has succeeded
+                if (_polymorphedEnemy != null)
+                    myNearbyPolymorphed = ObjectManager.GetObjectWoWUnit().Find(u => u.HaveBuff("Polymorph") && u.Guid == _polymorphedEnemy.Guid);
+                
+                // If we don't have a polymorphed enemy
+                if (myNearbyPolymorphed == null)
                 {
-                    ObjectManager.Me.FocusGuid = enemy.DisplayId;
-                    //Main.Log(ObjectManager.Me.Focus.CreatureTypeTarget);
-                    if (enemy.HaveBuff("Polymorph"))
+                    _polymorphedEnemy = null;
+                    _isPolymorphing = true;
+                    WoWUnit firstTarget = ObjectManager.Target;
+                    WoWUnit potentialPolymorphTarget = null;
+
+                    // Select our attackers one by one for potential polymorphs
+                    foreach (WoWUnit enemy in ObjectManager.GetUnitAttackPlayer())
                     {
-                        Main.Log($"{enemy.Name} is Polymorphed!");
-                        anAttackerIsPolymorphed = true;
-                        break;
+                        Interact.InteractGameObject(enemy.GetBaseAddress);
+
+                        if ((enemy.CreatureTypeTarget == "Beast" || enemy.CreatureTypeTarget == "Humanoid") 
+                        && enemy.Guid != firstTarget.Guid)
+                        {
+                            potentialPolymorphTarget = enemy;
+                            break;
+                        }
                     }
-                    if (enemy.CreatureTypeTarget == "Beast" 
-                    && enemy.DisplayId != firstTarget.DisplayId)
-                        possiblePolymorphTarget = enemy;
-                }
 
-                if (possiblePolymorphTarget != null
-                && !anAttackerIsPolymorphed)
-                {
-                    Interact.InteractGameObject(possiblePolymorphTarget.GetBaseAddress);
-                    Thread.Sleep(50);
-                    Cast(Polymorph);
-                }
+                    // Polymorph cast
+                    if (potentialPolymorphTarget != null && _polymorphedEnemy == null)
+                    {
+                        Interact.InteractGameObject(potentialPolymorphTarget.GetBaseAddress);
+                        Cast(Polymorph);
+                        _polymorphedEnemy = potentialPolymorphTarget;
+                        Usefuls.WaitIsCasting();
+                    }
 
-                Thread.Sleep(50);
-                Interact.InteractGameObject(firstTarget.GetBaseAddress);
-            }*/
+                    // Get back to actual target
+                    Interact.InteractGameObject(firstTarget.GetBaseAddress);
+                    _isPolymorphing = false;
+                }
+            }
         };
 
         Rotation();
@@ -347,7 +365,8 @@ public static class Mage
         // Frost Nova
         if (Target.GetDistance < 8f 
             && Target.HealthPercent > 10 
-            && !Target.HaveBuff("Frostbite"))
+            && !Target.HaveBuff("Frostbite")
+            && _polymorphedEnemy == null)
             if (Cast(FrostNova))
                 return;
 
@@ -394,6 +413,7 @@ public static class Mage
             && !_isBackingUp 
             && !MovementManager.InMovement)
         {
+            Main.Log("Wand");
             Main.SetRange(_distanceRange);
             if (Cast(UseWand, false))
                 return;

@@ -24,6 +24,7 @@ public class ZEMageSettings : Settings
         ActivateCombatDebug = false;
         FireblastThreshold = 30;
         BackupUsingCTM = true;
+        UsePolymorph = true;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCMage "
@@ -84,6 +85,12 @@ public class ZEMageSettings : Settings
     [DisplayName("Blink when backing up")]
     [Description("Use Blink when backing up from the target")]
     public bool BlinkWhenBackup { get; set; }
+
+    [Category("Combat Rotation")]
+    [DefaultValue(true)]
+    [DisplayName("Use Polymorph")]
+    [Description("Use Polymorph on multiaggro")]
+    public bool UsePolymorph { get; set; }
 
     [Category("Combat Rotation")]
     [DefaultValue(true)]
