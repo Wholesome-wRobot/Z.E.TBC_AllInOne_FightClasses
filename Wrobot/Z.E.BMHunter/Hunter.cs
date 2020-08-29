@@ -108,7 +108,6 @@ public static class Hunter
                     && ObjectManager.Target.GetDistance < 10f
                     && limiter <= 6)
                     {
-                        Move.Backward(Move.MoveAction.PressKey, 500);
                         limiter++;
                         Main.Log(limiter.ToString());
                     }
