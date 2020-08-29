@@ -39,12 +39,17 @@ public static class Mage
             _polymorphableEnemyInThisFight = true;
             Main.SetRange(_distanceRange);
 
-            if (!Fight.InFight && Me.InCombatFlagOnly && _polymorphedEnemy != null && ObjectManager.GetNumberAttackPlayer() < 1
+            if (!Fight.InFight 
+            && Me.InCombatFlagOnly 
+            && _polymorphedEnemy != null 
+            && ObjectManager.GetNumberAttackPlayer() < 1
             && _polymorphedEnemy.IsAlive)
             {
                 Main.Log($"Starting fight with {_polymorphedEnemy.Name} (polymorphed)");
                 ulong _enemyGUID = _polymorphedEnemy.Guid;
                 _polymorphedEnemy = null;
+                Fight.InFight = false;
+                Fight.CurrentTarget = null;
                 Fight.StartFight(_enemyGUID);
             }
         };
@@ -189,8 +194,8 @@ public static class Mage
             {
                 if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
                 {
-                    if (_polymorphedEnemy != null)
-                        Main.Log(_polymorphedEnemy.Name);
+                    if (_polymorphedEnemy != null && !ObjectManager.Me.InCombatFlagOnly)
+                        _polymorphedEnemy = null;
 
                     if (!Fight.InFight && !ObjectManager.Me.InCombatFlagOnly && !Me.IsMounted)
                         BuffRotation();
