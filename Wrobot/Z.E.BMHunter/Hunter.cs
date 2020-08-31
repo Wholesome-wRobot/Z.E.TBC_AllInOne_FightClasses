@@ -336,8 +336,12 @@ public static class Hunter
         }
 
         // Serpent Sting
-        if (!Target.HaveBuff("Serpent Sting") && Target.GetDistance < 34f && ToolBox.CanBleed(Me.TargetObject) 
-            && Target.HealthPercent >= 80 && Me.ManaPercentage > 50u && !SteadyShot.KnownSpell
+        if (!Target.HaveBuff("Serpent Sting") 
+            && Target.GetDistance < 34f 
+            && ToolBox.CanBleed(Me.TargetObject) 
+            && Target.HealthPercent >= 80 
+            && Me.ManaPercentage > 50u 
+            && !SteadyShot.KnownSpell
             && Target.GetDistance > 13f)
             if (Cast(SerpentSting))
                 return;

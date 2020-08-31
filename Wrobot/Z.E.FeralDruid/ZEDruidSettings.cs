@@ -29,6 +29,7 @@ public class ZEDruidSettings : Settings
         ActivateCombatDebug = false;
         BearFormOnMultiAggro = true;
         NumberOfAttackersBearForm = 2;
+        UseAquaticForm = true;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCDruid "
@@ -71,6 +72,12 @@ public class ZEDruidSettings : Settings
     [DisplayName("Use Travel Form")]
     [Description("Use Travel Form (Triggers more shapeshifts)")]
     public bool UseTravelForm { get; set; }
+
+    [Category("Misc")]
+    [DefaultValue(true)]
+    [DisplayName("Use Aquatic Form")]
+    [Description("Use Aquatic Form")]
+    public bool UseAquaticForm { get; set; }
 
     [Category("Misc")]
     [DefaultValue(true)]

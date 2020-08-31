@@ -230,11 +230,12 @@ public static class Rogue
             _isStealthApproching = true;
             if (ObjectManager.Me.IsAlive && ObjectManager.Target.IsAlive)
             {
-
                 while (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
-                && (ObjectManager.Target.GetDistance > 4f)
-                && !ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange) && Fight.InFight
-                && _stealthApproachTimer.ElapsedMilliseconds <= 15000 && Me.HaveBuff("Stealth"))
+                && (ObjectManager.Target.GetDistance > Main.GetRange() - 1)
+                && !ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange) 
+                && Fight.InFight
+                && _stealthApproachTimer.ElapsedMilliseconds <= 15000 
+                && Me.HaveBuff("Stealth"))
                 {
                     // deactivate autoattack
                     ToggleAutoAttack(false);

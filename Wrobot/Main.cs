@@ -10,15 +10,16 @@ using System.ComponentModel;
 public class Main : ICustomClass
 {
     public static readonly float DefaultMeleeRange = 5f;
-    private static float _settingRange = DefaultMeleeRange;
 
-    public static string wowClass = ObjectManager.Me.WowClass.ToString();
-    public static int _humanReflexTime = 500; 
-    public static bool _isLaunched;
-    public static string version = "1.5.105"; // Must match version in Version.txt
+    private static float _settingRange = DefaultMeleeRange;
     private static bool _debug = false;
     private static bool _saveCalcuCombatRangeSetting = wManager.wManagerSetting.CurrentSetting.CalcuCombatRange;
     private static readonly BackgroundWorker _talentThread = new BackgroundWorker();
+
+    public static string wowClass = ObjectManager.Me.WowClass.ToString();
+    public static int _humanReflexTime = 500;
+    public static bool _isLaunched;
+    public static string version = "1.5.2"; // Must match version in Version.txt
     public bool haveCheckedForUpdate = false;
     public static bool HMPrunningAway = false;
 
@@ -148,7 +149,7 @@ public class Main : ICustomClass
     public static void SetRangeToMelee()
     {
         if (ObjectManager.Target != null)
-            SetRange(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 2));
+            SetRange(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 3));
         else
             SetRange(DefaultMeleeRange);
     }
@@ -156,9 +157,9 @@ public class Main : ICustomClass
     public static bool CurrentRangeIsMelee()
     {
         if (ObjectManager.Target != null)
-            return GetRange() == DefaultMeleeRange + (ObjectManager.Target.CombatReach / 2);
+            return (decimal)GetRange() == (decimal)(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 3));
         else
-            return GetRange() == DefaultMeleeRange;
+            return (decimal)GetRange() == (decimal)DefaultMeleeRange;
     }
 
     public static float GetRange()

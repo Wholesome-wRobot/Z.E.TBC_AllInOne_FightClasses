@@ -13,7 +13,7 @@ using wManager.Wow.ObjectManager;
 public static class Priest
 {
     private static WoWLocalPlayer Me = ObjectManager.Me;
-    private static float _distaneRange = 28f;
+    private static readonly float _distaneRange = 26f;
     private static bool _usingWand = false;
     private static bool _iCanUseWand = ToolBox.HaveRangedWeaponEquipped();
     private static int _innerManaSaveThreshold = 20;
@@ -70,7 +70,7 @@ public static class Priest
                         if (_goInMFRange)
                             Main.SetRange(17f);
                         else
-                            Main.SetRange(_distaneRange - 2);
+                            Main.SetRange(_distaneRange);
                     }
 
                     if (!Fight.InFight)

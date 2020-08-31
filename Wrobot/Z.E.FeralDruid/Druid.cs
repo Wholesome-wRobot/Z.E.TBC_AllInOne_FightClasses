@@ -112,16 +112,23 @@ public static class Druid
 		{
 			try
 			{
-                if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
+                if (!Products.InPause 
+                    && !ObjectManager.Me.IsDeadMe 
+                    && !Main.HMPrunningAway)
                 {
                     // Buff rotation
-                    if (!Fight.InFight && ObjectManager.GetNumberAttackPlayer() < 1)
+                    if (!Fight.InFight 
+                        && ObjectManager.GetNumberAttackPlayer() < 1)
                         BuffRotation();
 
                     // Pull & Combat rotation
-                    if (Fight.InFight && ObjectManager.Me.Target > 0UL && ObjectManager.Target.IsAttackable && ObjectManager.Target.IsAlive)
+                    if (Fight.InFight 
+                        && ObjectManager.Me.Target > 0UL 
+                        && ObjectManager.Target.IsAttackable 
+                        && ObjectManager.Target.IsAlive)
                     {
-                        if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
+                        if (ObjectManager.GetNumberAttackPlayer() < 1 
+                            && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
                         else
                             CombatRotation();
@@ -142,22 +149,28 @@ public static class Druid
         if (!Me.IsMounted && !Me.IsCast)
         {
             // Regrowth
-            if (Me.HealthPercent < 70 && !Me.HaveBuff("Regrowth"))
+            if (Me.HealthPercent < 70 
+                && !Me.HaveBuff("Regrowth"))
                 if (Cast(Regrowth))
                     return;
 
             // Rejuvenation
-            if (Me.HealthPercent < 50 && !Me.HaveBuff("Rejuvenation") && !Regrowth.KnownSpell)
+            if (Me.HealthPercent < 50 
+                && !Me.HaveBuff("Rejuvenation") 
+                && !Regrowth.KnownSpell)
                 if (Cast(Rejuvenation))
                     return;
 
             // Healing Touch
-            if (Me.HealthPercent < 40 && !Regrowth.KnownSpell)
+            if (Me.HealthPercent < 40 
+                && !Regrowth.KnownSpell)
                 if (Cast(HealingTouch))
                     return;
 
             // Remove Curse
-            if (ToolBox.HasCurseDebuff() && RemoveCurse.KnownSpell && RemoveCurse.IsSpellUsable)
+            if (ToolBox.HasCurseDebuff() 
+                && RemoveCurse.KnownSpell 
+                && RemoveCurse.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
                 Thread.Sleep(200);
@@ -169,7 +182,9 @@ public static class Druid
             }
 
             // Abolish Poison
-            if (ToolBox.HasPoisonDebuff() && RemoveCurse.KnownSpell && RemoveCurse.IsSpellUsable)
+            if (ToolBox.HasPoisonDebuff() 
+                && RemoveCurse.KnownSpell 
+                && RemoveCurse.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
                 Thread.Sleep(200);
@@ -181,7 +196,9 @@ public static class Druid
             }
 
             // Mark of the Wild
-            if (!Me.HaveBuff("Mark of the Wild") && MarkOfTheWild.KnownSpell && MarkOfTheWild.IsSpellUsable)
+            if (!Me.HaveBuff("Mark of the Wild") 
+                && MarkOfTheWild.KnownSpell 
+                && MarkOfTheWild.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
                 Thread.Sleep(200);
@@ -191,7 +208,9 @@ public static class Druid
             }
 
             // Thorns
-            if (!Me.HaveBuff("Thorns") && Thorns.KnownSpell && Thorns.IsSpellUsable)
+            if (!Me.HaveBuff("Thorns") 
+                && Thorns.KnownSpell 
+                && Thorns.IsSpellUsable)
             {
                 Lua.RunMacroText("/target player");
                 Thread.Sleep(200);
@@ -204,18 +223,31 @@ public static class Druid
             if (!Me.HaveBuff("Omen of Clarity") && OmenOfClarity.IsSpellUsable)
                 if (Cast(OmenOfClarity))
                     return;
+
+            // Aquatic form
+            if (Me.IsSwimming
+                && !Me.HaveBuff("Aquatic Form")
+                && Me.ManaPercentage > 50)
+                if (Cast(AquaticForm))
+                    return;
             
             // Travel Form
-            if (!Me.HaveBuff("Travel Form") && _settings.UseTravelForm && Me.ManaPercentage > 50
+            if (!Me.HaveBuff("Travel Form") 
+                && !Me.HaveBuff("Aquatic Form")
+                && _settings.UseTravelForm 
+                && Me.ManaPercentage > 50
                 && Me.ManaPercentage > wManager.wManagerSetting.CurrentSetting.DrinkPercent 
                 && !ObjectManager.Target.IsFlightMaster)
                 if (Cast(TravelForm))
                     return;
 
             // Cat Form
-            if (!Me.HaveBuff("Cat Form") && (!_settings.UseTravelForm || !TravelForm.KnownSpell || Me.ManaPercentage < 50) 
+            if (!Me.HaveBuff("Cat Form")
+                && !Me.HaveBuff("Aquatic Form")
+                && (!_settings.UseTravelForm || !TravelForm.KnownSpell || Me.ManaPercentage < 50) 
                 && Me.ManaPercentage > wManager.wManagerSetting.CurrentSetting.DrinkPercent
-                && !ObjectManager.Target.IsFlightMaster && _settings.CatFormOOC)
+                && !ObjectManager.Target.IsFlightMaster 
+                && _settings.CatFormOOC)
             {
                 if (Cast(CatForm))
                     return;
@@ -225,11 +257,13 @@ public static class Druid
 
     internal static void Pull()
     {
-        if (!BearForm.KnownSpell && !CatForm.KnownSpell)
+        if (!BearForm.KnownSpell 
+            && !CatForm.KnownSpell)
             _pullFromAfar = true;
 
         // Check if surrounding enemies
-        if (ObjectManager.Target.GetDistance < _pullRange && !_pullFromAfar)
+        if (ObjectManager.Target.GetDistance < _pullRange 
+            && !_pullFromAfar)
             _pullFromAfar = ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange);
 
         // Pull from afar
@@ -628,6 +662,7 @@ public static class Druid
     private static Spell Maim = new Spell("Maim");
     private static Spell OmenOfClarity = new Spell("Omen of Clarity");
     private static Spell WarStomp = new Spell("War Stomp");
+    private static Spell AquaticForm = new Spell("Aquatic Form");
 
     private static bool MaulOn()
     {

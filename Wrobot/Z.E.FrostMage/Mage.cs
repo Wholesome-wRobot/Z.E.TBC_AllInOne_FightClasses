@@ -46,10 +46,10 @@ public static class Mage
             && _polymorphedEnemy.IsAlive)
             {
                 Main.Log($"Starting fight with {_polymorphedEnemy.Name} (polymorphed)");
+                Fight.InFight = false;
+                Fight.CurrentTarget = _polymorphedEnemy;
                 ulong _enemyGUID = _polymorphedEnemy.Guid;
                 _polymorphedEnemy = null;
-                Fight.InFight = false;
-                Fight.CurrentTarget = null;
                 Fight.StartFight(_enemyGUID);
             }
         };

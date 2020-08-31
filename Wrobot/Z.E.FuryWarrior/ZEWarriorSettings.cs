@@ -5,7 +5,6 @@ using wManager.Wow.ObjectManager;
 using System.ComponentModel;
 using System.IO;
 using robotManager;
-using System.Collections.Generic;
 
 [Serializable]
 public class ZEWarriorSettings : Settings
