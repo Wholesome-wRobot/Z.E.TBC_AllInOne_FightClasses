@@ -19,7 +19,7 @@ public class Main : ICustomClass
     public static string wowClass = ObjectManager.Me.WowClass.ToString();
     public static int _humanReflexTime = 500;
     public static bool _isLaunched;
-    public static string version = "1.5.2"; // Must match version in Version.txt
+    public static string version = "1.5.21"; // Must match version in Version.txt
     public bool haveCheckedForUpdate = false;
     public static bool HMPrunningAway = false;
 
@@ -149,7 +149,7 @@ public class Main : ICustomClass
     public static void SetRangeToMelee()
     {
         if (ObjectManager.Target != null)
-            SetRange(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 3));
+            SetRange(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 2.5f));
         else
             SetRange(DefaultMeleeRange);
     }
@@ -157,7 +157,7 @@ public class Main : ICustomClass
     public static bool CurrentRangeIsMelee()
     {
         if (ObjectManager.Target != null)
-            return (decimal)GetRange() == (decimal)(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 3));
+            return (decimal)GetRange() == (decimal)(DefaultMeleeRange + (ObjectManager.Target.CombatReach / 2.5f));
         else
             return (decimal)GetRange() == (decimal)DefaultMeleeRange;
     }
