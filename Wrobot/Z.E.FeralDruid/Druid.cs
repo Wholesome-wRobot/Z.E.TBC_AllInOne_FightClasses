@@ -619,8 +619,8 @@ public static class Druid
 
             // Moonfire
             if (!Target.HaveBuff("Moonfire") 
-                && Me.ManaPercentage > 35 
-                && Target.HealthPercent > 30 
+                && Me.ManaPercentage > 15 
+                && Target.HealthPercent > 15 
                 && Me.Level >= 8)
                 if (Cast(Moonfire))
                     return;
