@@ -156,9 +156,17 @@ public static class Mage
                     if (potentialPolymorphTarget != null && _polymorphedEnemy == null)
                     {
                         Interact.InteractGameObject(potentialPolymorphTarget.GetBaseAddress);
-                        Cast(Polymorph);
+                         while (!Cast(Polymorph)
+                        && ObjectManager.Target.IsAlive
+                        && ObjectManager.Me.IsAlive
+                        && Main._isLaunched
+                        && !Products.InPause)
+                        {
+                            Thread.Sleep(200);
+                        }
                         _polymorphedEnemy = potentialPolymorphTarget;
                         Usefuls.WaitIsCasting();
+                        Thread.Sleep(500);
                     }
 
                     // Get back to actual target
@@ -208,9 +216,10 @@ public static class Mage
                         && !_isBackingUp
                         && !_isPolymorphing)
                     {
-                        if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
+                        if (ObjectManager.GetNumberAttackPlayer() < 1 
+                            && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
-                        else
+                        else if (!ObjectManager.Target.HaveBuff("Polymorph") || ObjectManager.GetNumberAttackPlayer() < 1)
                             CombatRotation();
                     }
                 }
