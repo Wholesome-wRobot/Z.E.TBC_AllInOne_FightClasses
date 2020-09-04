@@ -53,18 +53,25 @@ public static class Warrior
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
+				if (!Products.InPause 
+                    && !ObjectManager.Me.IsDeadMe 
+                    && !Main.HMPrunningAway)
                 {
                     // Buff rotation
-                    if (!Fight.InFight && ObjectManager.GetNumberAttackPlayer() < 1)
+                    if (!Fight.InFight 
+                        && ObjectManager.GetNumberAttackPlayer() < 1)
                     {
                         BuffRotation();
                     }
 
                     // Pull & Combat rotation
-                    if (Fight.InFight && ObjectManager.Me.Target > 0UL && ObjectManager.Target.IsAttackable && ObjectManager.Target.IsAlive)
+                    if (Fight.InFight 
+                        && ObjectManager.Me.Target > 0UL 
+                        && ObjectManager.Target.IsAttackable 
+                        && ObjectManager.Target.IsAlive)
                     {
-                        if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
+                        if (ObjectManager.GetNumberAttackPlayer() < 1 
+                            && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
                         else
                             CombatRotation();
@@ -85,20 +92,30 @@ public static class Warrior
         if (!Me.IsMounted && !Me.IsCast)
         {
             // Battle Shout
-            if (!Me.HaveBuff("Battle Shout") && BattleShout.IsSpellUsable && 
+            if (!Me.HaveBuff("Battle Shout") 
+                && BattleShout.IsSpellUsable && 
                 (!_settings.UseCommandingShout || !CommandingShout.KnownSpell))
                 if (Cast(BattleShout))
                     return;
 
             // Commanding Shout
-            if (!Me.HaveBuff("Commanding Shout") && (_settings.UseCommandingShout && CommandingShout.KnownSpell))
+            if (!Me.HaveBuff("Commanding Shout") 
+                && (_settings.UseCommandingShout 
+                && CommandingShout.KnownSpell))
                 if (Cast(CommandingShout))
                     return;
 
             // Cannibalize
-            if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 && u.IsDead && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
+            if (ObjectManager.GetObjectWoWUnit().Where(u => u.GetDistance <= 8 
+            && u.IsDead 
+            && (u.CreatureTypeTarget == "Humanoid" || u.CreatureTypeTarget == "Undead")).Count() > 0)
             {
-                if (Me.HealthPercent < 50 && !Me.HaveBuff("Drink") && !Me.HaveBuff("Food") && Me.IsAlive && Cannibalize.KnownSpell && Cannibalize.IsSpellUsable)
+                if (Me.HealthPercent < 50 
+                    && !Me.HaveBuff("Drink") 
+                    && !Me.HaveBuff("Food") 
+                    && Me.IsAlive 
+                    && Cannibalize.KnownSpell 
+                    && Cannibalize.IsSpellUsable)
                     if (Cast(Cannibalize))
                         return;
             }
@@ -114,19 +131,25 @@ public static class Warrior
             _pullFromAfar = ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange);
 
         // Check stance
-        if (!InBattleStance() && ObjectManager.Me.Rage < 10 && !_pullFromAfar && !_settings.AlwaysPull)
+        if (!InBattleStance() 
+            && ObjectManager.Me.Rage < 10 
+            && !_pullFromAfar 
+            && !_settings.AlwaysPull)
             Cast(BattleStance);
 
         // Pull from afar
-        if ((_pullFromAfar && _pullMeleeTimer.ElapsedMilliseconds < 5000) || _settings.AlwaysPull
+        if ((_pullFromAfar 
+            && _pullMeleeTimer.ElapsedMilliseconds < 5000) || _settings.AlwaysPull
             && ObjectManager.Target.GetDistance < 24f)
         {
             Spell pullMethod = null;
 
-            if (Shoot.IsSpellUsable && Shoot.KnownSpell)
+            if (Shoot.IsSpellUsable 
+                && Shoot.KnownSpell)
                 pullMethod = Shoot;
 
-            if (Throw.IsSpellUsable && Throw.KnownSpell)
+            if (Throw.IsSpellUsable 
+                && Throw.KnownSpell)
                 pullMethod = Throw;
 
             if (pullMethod == null)
@@ -170,7 +193,9 @@ public static class Warrior
                 return;
 
         // Charge Berserker Stance
-        if (InBerserkStance() && ObjectManager.Target.GetDistance > 9f && ObjectManager.Target.GetDistance < 24f 
+        if (InBerserkStance() 
+            && ObjectManager.Target.GetDistance > 9f 
+            && ObjectManager.Target.GetDistance < 24f 
             && !_pullFromAfar)
             if (Cast(Intercept))
                 return;
@@ -203,7 +228,8 @@ public static class Warrior
         if (_pullMeleeTimer.ElapsedMilliseconds > 0)
             _pullMeleeTimer.Reset();
 
-        if (_meleeTimer.ElapsedMilliseconds <= 0 && _pullFromAfar)
+        if (_meleeTimer.ElapsedMilliseconds <= 0 
+            && _pullFromAfar)
             _meleeTimer.Start();
 
         if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 5000) 
@@ -215,28 +241,42 @@ public static class Warrior
         }
 
         // Gift of the Naaru
-        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+        if (ObjectManager.GetNumberAttackPlayer() > 1 
+            && Me.HealthPercent < 50)
             if (Cast(GiftOfTheNaaru))
                 return;
 
         // Will of the Forsaken
-        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+        if (Me.HaveBuff("Fear") 
+            || Me.HaveBuff("Charm") 
+            || Me.HaveBuff("Sleep"))
             if (Cast(WillOfTheForsaken))
                 return;
 
         // Stoneform
-        if (ToolBox.HasPoisonDebuff() || ToolBox.HasDiseaseDebuff() || Me.HaveBuff("Bleed"))
+        if (ToolBox.HasPoisonDebuff() 
+            || ToolBox.HasDiseaseDebuff() 
+            || Me.HaveBuff("Bleed"))
             if (Cast(Stoneform))
                 return;
 
         // Escape Artist
-        if (Me.Rooted || Me.HaveBuff("Frostnova"))
+        if (Me.Rooted 
+            || Me.HaveBuff("Frostnova"))
             if (Cast(EscapeArtist))
                 return;
 
         // Warstomp
-        if (ObjectManager.GetNumberAttackPlayer() > 1 && Target.GetDistance < 8)
+        if (ObjectManager.GetNumberAttackPlayer() > 1 
+            && Target.GetDistance < 8)
             if (Cast(WarStomp))
+                return;
+
+        // Intercept
+        if (InBerserkStance()
+            && ObjectManager.Target.GetDistance > 12f
+            && ObjectManager.Target.GetDistance < 24f)
+            if (Cast(Intercept))
                 return;
 
         // Blood Fury
@@ -250,19 +290,26 @@ public static class Warrior
                 return;
 
         // Battle stance
-        if (InBerserkStance() && Me.Rage < 10 && (!_settings.PrioritizeBerserkStance || ObjectManager.GetNumberAttackPlayer() > 1) 
+        if (InBerserkStance() && Me.Rage < 10 
+            && (!_settings.PrioritizeBerserkStance || ObjectManager.GetNumberAttackPlayer() > 1) 
             && !_fightingACaster)
             if (Cast(BattleStance))
                 return;
 
         // Berserker stance
-        if (_settings.PrioritizeBerserkStance && !InBerserkStance() && BerserkerStance.KnownSpell && Me.Rage < 15
+        if (_settings.PrioritizeBerserkStance 
+            && !InBerserkStance() 
+            && BerserkerStance.KnownSpell 
+            && Me.Rage < 15
             && ObjectManager.GetNumberAttackPlayer() < 2)
             if (Cast(BerserkerStance))
                 return;
 
         // Fighting a caster
-        if (_fightingACaster && !InBerserkStance() && BerserkerStance.KnownSpell && Me.Rage < 20
+        if (_fightingACaster 
+            && !InBerserkStance() 
+            && BerserkerStance.KnownSpell 
+            && Me.Rage < 20
             && ObjectManager.GetNumberAttackPlayer() < 2)
         {
             if (Cast(BerserkerStance))
@@ -283,12 +330,14 @@ public static class Warrior
                 return;
 
         // Rampage
-        if (Rampage.KnownSpell && (!Me.HaveBuff("Rampage") || (Me.HaveBuff("Rampage") && ToolBox.BuffTimeLeft("Rampage") < 10)))
+        if (Rampage.KnownSpell 
+            && (!Me.HaveBuff("Rampage") || (Me.HaveBuff("Rampage") && ToolBox.BuffTimeLeft("Rampage") < 10)))
             if (Cast(Rampage))
                 return;
 
         // Berserker Rage
-        if (InBerserkStance() && Target.HealthPercent > 70)
+        if (InBerserkStance() 
+            && Target.HealthPercent > 70)
             if (Cast(BerserkerRage))
                 return;
 
@@ -310,24 +359,30 @@ public static class Warrior
             return;
 
         // Sweeping Strikes
-        if (_inMeleeRange && ObjectManager.GetNumberAttackPlayer() > 1 && ToolBox.CheckIfEnemiesClose(15f))
+        if (_inMeleeRange 
+            && ObjectManager.GetNumberAttackPlayer() > 1 
+            && ToolBox.CheckIfEnemiesClose(15f))
             if (Cast(SweepingStrikes))
                 return;
 
         // Retaliation
-        if (_inMeleeRange && ObjectManager.GetNumberAttackPlayer() > 1 && ToolBox.CheckIfEnemiesClose(15f))
+        if (_inMeleeRange && ObjectManager.GetNumberAttackPlayer() > 1 
+            && ToolBox.CheckIfEnemiesClose(15f))
             if (Cast(Retaliation) && (!SweepingStrikes.IsSpellUsable || !SweepingStrikes.KnownSpell))
                 return;
 
         // Cleave
-        if (_inMeleeRange && ObjectManager.GetNumberAttackPlayer() > 1 && ToolBox.CheckIfEnemiesClose(15f) && 
+        if (_inMeleeRange 
+            && ObjectManager.GetNumberAttackPlayer() > 1 
+            && ToolBox.CheckIfEnemiesClose(15f) && 
             (!SweepingStrikes.IsSpellUsable || !SweepingStrikes.KnownSpell) && ObjectManager.Me.Rage > 40
             && _settings.UseCleave)
             if (Cast(Cleave))
                 return;
 
         // Blood Rage
-        if (_settings.UseBloodRage && Me.HealthPercent > 90)
+        if (_settings.UseBloodRage 
+            && Me.HealthPercent > 90)
             if (Cast(BloodRage))
                 return;
 
@@ -341,29 +396,38 @@ public static class Warrior
                 return;
 
         // Commanding Shout
-        if (!Me.HaveBuff("Commanding Shout") && (_settings.UseCommandingShout && CommandingShout.KnownSpell))
+        if (!Me.HaveBuff("Commanding Shout") 
+            && (_settings.UseCommandingShout 
+            && CommandingShout.KnownSpell))
             if (Cast(CommandingShout))
                 return;
 
         // Battle Shout
-        if (!Me.HaveBuff("Battle Shout") && (!_settings.UseCommandingShout || !CommandingShout.KnownSpell))
+        if (!Me.HaveBuff("Battle Shout") 
+            && (!_settings.UseCommandingShout || !CommandingShout.KnownSpell))
             if (Cast(BattleShout))
                 return;
 
         // Rend
-        if (!Target.HaveBuff("Rend") && ToolBox.CanBleed(Target) && _inMeleeRange && _settings.UseRend
+        if (!Target.HaveBuff("Rend") 
+            && ToolBox.CanBleed(Target) 
+            && _inMeleeRange 
+            && _settings.UseRend
             && Target.HealthPercent > 25)
             if (Cast(Rend))
                 return;
 
         // Demoralizing Shout
-        if (_settings.UseDemoralizingShout && !Target.HaveBuff("Demoralizing Shout") 
+        if (_settings.UseDemoralizingShout 
+            && !Target.HaveBuff("Demoralizing Shout") 
             && (ObjectManager.GetNumberAttackPlayer() > 1 || !ToolBox.CheckIfEnemiesClose(15f)) && _inMeleeRange)
             if (Cast(DemoralizingShout))
                 return;
         
         // Heroic Strike
-        if (_inMeleeRange && !HeroicStrikeOn() && (!_saveRage || Me.Rage > 60))
+        if (_inMeleeRange 
+            && !HeroicStrikeOn() 
+            && (!_saveRage || Me.Rage > 60))
             if (Cast(HeroicStrike))
                 return;
     }

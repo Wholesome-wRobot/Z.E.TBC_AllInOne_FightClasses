@@ -220,8 +220,15 @@ public class ToolBox
             bool flagHostile = unit.Reaction.ToString().Equals("Hostile");
             float distanceFromTarget = unit.Position.DistanceTo(target.Position);
 
-            if (unit.IsAlive && !unit.IsTapDenied && unit.IsValid && !unit.IsTaggedByOther && !unit.PlayerControlled
-                && unit.IsAttackable && distanceFromTarget < closestUnitDistance && flagHostile && unit.Guid != target.Guid)
+            if (unit.IsAlive 
+                && !unit.IsTapDenied 
+                && unit.IsValid 
+                && !unit.IsTaggedByOther 
+                && !unit.PlayerControlled
+                && unit.IsAttackable 
+                && distanceFromTarget < closestUnitDistance 
+                && flagHostile 
+                && unit.Guid != target.Guid)
             {
                 closestUnit = unit;
                 closestUnitDistance = distanceFromTarget;

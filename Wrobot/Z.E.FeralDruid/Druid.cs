@@ -264,7 +264,7 @@ public static class Druid
         // Check if surrounding enemies
         if (ObjectManager.Target.GetDistance < _pullRange 
             && !_pullFromAfar)
-            _pullFromAfar = ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange);
+            _pullFromAfar = ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, 20f);
 
         // Pull from afar
         if (((_pullFromAfar && _pullMeleeTimer.ElapsedMilliseconds < 5000) || _settings.AlwaysPull)
@@ -352,7 +352,8 @@ public static class Druid
         }
 
         // Pull from distance
-        if (_pullFromAfar && ObjectManager.Target.GetDistance <= _pullRange)
+        if (_pullFromAfar 
+            && ObjectManager.Target.GetDistance <= _pullRange)
             if (PullSpell())
                 return;
     }
@@ -724,10 +725,11 @@ public static class Druid
             Cast(CatForm);
             return true;
         }
-        else if (Cast(Wrath))
+        else
         {
-            Thread.Sleep(2000);
-            return true;
+            MovementManager.StopMove();
+            Lua.RunMacroText("/cast Moonfire(Rank 1)");
+            Thread.Sleep(3000);
         }
         return false;
     }
