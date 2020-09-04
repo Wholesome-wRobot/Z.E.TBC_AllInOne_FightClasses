@@ -191,8 +191,11 @@ public static class Hunter
 						Lua.LuaDoString("PetAttack();", false);
 
                     // Aspect of the Cheetah
-                    if (!Me.IsMounted && !Fight.InFight && !Me.HaveBuff("Aspect of the Cheetah")
-                        && MovementManager.InMoveTo && Me.ManaPercentage > 60f)
+                    if (!Me.IsMounted && !Fight.InFight 
+                        && !Me.HaveBuff("Aspect of the Cheetah")
+                        && MovementManager.InMoveTo && 
+                        Me.ManaPercentage > 60f
+                        && _settings.UseAspectOfTheCheetah)
                         Cast(AspectCheetah);
 
 					if (Fight.InFight && Me.Target > 0UL && ObjectManager.Target.IsAttackable)
@@ -263,7 +266,8 @@ public static class Hunter
                 return;
 
         // Aspect of the Hawk
-        if (!Me.HaveBuff("Aspect of the Hawk") && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah"))
+        if (!Me.HaveBuff("Aspect of the Hawk") 
+            && (Me.ManaPercentage > 90 || Me.HaveBuff("Aspect of the Cheetah"))
             || (!Me.HaveBuff("Aspect of the Hawk") && !Me.HaveBuff("Aspect of the Cheetah") && !Me.HaveBuff("Aspect of the Viper")))
             if (Cast(AspectHawk))
                 return;

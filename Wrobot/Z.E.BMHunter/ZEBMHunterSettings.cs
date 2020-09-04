@@ -27,6 +27,7 @@ public class ZEBMHunterSettings : Settings
         AutoGrowl = false;
         ActivateCombatDebug = false;
         BackupUsingCTM = false;
+        UseAspectOfTheCheetah = true;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCHunter "
@@ -93,6 +94,12 @@ public class ZEBMHunterSettings : Settings
     [DisplayName("Feed Pet")]
     [Description("Use Z.E.Hunter to manage pet feeding")]
     public bool FeedPet { get; set; }
+
+    [Category("Misc")]
+    [DefaultValue(true)]
+    [DisplayName("Use Aspect of the Cheetah")]
+    [Description("Use Aspect of the Cheetah")]
+    public bool UseAspectOfTheCheetah { get; set; }
 
     [Category("Misc")]
     [DefaultValue(false)]
