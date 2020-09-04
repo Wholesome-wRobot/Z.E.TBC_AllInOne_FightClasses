@@ -13,7 +13,7 @@ public class ZERogueSettings : Settings
 
     private ZERogueSettings()
     {
-        ThreadSleepCycle = 10;
+        ThreadSleepCycle = 100;
         UseDefaultTalents = true;
         AssignTalents = false;
         TalentCodes = new string[] { };
@@ -33,7 +33,7 @@ public class ZERogueSettings : Settings
     }
 
     [Category("Performance")]
-    [DefaultValue(10)]
+    [DefaultValue(100)]
     [DisplayName("Refresh rate (ms)")]
     [Description("Set this value higher if you have low CPU performance. In doubt, do not change this value.")]
     public int ThreadSleepCycle { get; set; }

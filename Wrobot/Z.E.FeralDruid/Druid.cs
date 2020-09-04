@@ -127,8 +127,7 @@ public static class Druid
                         && ObjectManager.Target.IsAttackable 
                         && ObjectManager.Target.IsAlive)
                     {
-                        if (ObjectManager.GetNumberAttackPlayer() < 1 
-                            && !ObjectManager.Target.InCombatFlagOnly)
+                        if (!ObjectManager.Me.InCombatFlagOnly)
                             Pull();
                         else
                             CombatRotation();
@@ -262,15 +261,20 @@ public static class Druid
             _pullFromAfar = true;
 
         // Check if surrounding enemies
-        if (ObjectManager.Target.GetDistance < _pullRange 
-            && !_pullFromAfar)
+        if (!_pullFromAfar)
             _pullFromAfar = ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, 20f);
+
+        // Get in pull distance
+        if (_pullFromAfar && ObjectManager.Target.GetDistance >= _pullRange)
+            return;
 
         // Pull from afar
         if (((_pullFromAfar && _pullMeleeTimer.ElapsedMilliseconds < 5000) || _settings.AlwaysPull)
             && ObjectManager.Target.GetDistance <= _pullRange)
             if (PullSpell())
                 return;
+
+        //Main.Log("pullfromafar is " + _pullFromAfar + " timer : " + _pullMeleeTimer.ElapsedMilliseconds);
 
         // Melee ?
         if (_pullMeleeTimer.ElapsedMilliseconds <= 0 
@@ -312,17 +316,22 @@ public static class Druid
             Main.SetRangeToMelee();
 
             // Prowl approach
-            if (Me.HaveBuff("Prowl") && ObjectManager.Target.GetDistance > 3f && !_isStealthApproching)
+            if (Me.HaveBuff("Prowl") 
+                && ObjectManager.Target.GetDistance > 3f 
+                && !_isStealthApproching)
             {
                 _stealthApproachTimer.Start();
                 _isStealthApproching = true;
-                if (ObjectManager.Me.IsAlive && ObjectManager.Target.IsAlive)
+                if (ObjectManager.Me.IsAlive 
+                    && ObjectManager.Target.IsAlive)
                 {
 
                     while (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause
                     && (ObjectManager.Target.GetDistance > 4f || !Claw.IsSpellUsable) 
-                    && !ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, _pullRange) && Fight.InFight
-                    && _stealthApproachTimer.ElapsedMilliseconds <= 7000 && Me.HaveBuff("Prowl"))
+                    && !ToolBox.CheckIfEnemiesOnPull(ObjectManager.Target, 20f) 
+                    && Fight.InFight
+                    && _stealthApproachTimer.ElapsedMilliseconds <= 7000 
+                    && Me.HaveBuff("Prowl"))
                     {
                         Vector3 position = ToolBox.BackofVector3(ObjectManager.Target.Position, ObjectManager.Target, 2.5f);
                         MovementManager.MoveTo(position);
@@ -440,7 +449,7 @@ public static class Druid
 
         // Catorm
         if (!Me.HaveBuff("Cat Form") 
-            && ObjectManager.GetNumberAttackPlayer() < 2)
+            && (ObjectManager.GetNumberAttackPlayer() < _settings.NumberOfAttackersBearForm || !BearForm.KnownSpell))
             if (Cast(CatForm))
                 return;
 
@@ -605,8 +614,14 @@ public static class Druid
         #endregion
 
         #region Human form rotation
-        
+
         // **************** HUMAN FORM ROTATION ****************
+
+        // Avoid accidental Human Form stay
+        if (CatForm.KnownSpell && ToolBox.GetSpellCost("Cat Form") < Me.Mana)
+            return;
+        if (BearForm.KnownSpell && ToolBox.GetSpellCost("Bear Form") < Me.Mana)
+            return;
 
         if (!Me.HaveBuff("Bear Form") 
             && !Me.HaveBuff("Cat Form") 
@@ -708,12 +723,13 @@ public static class Druid
     private static bool PullSpell()
     {
         Main.SetRange(_pullRange);
-        MovementManager.StopMoveTo(false, 500);
+        //MovementManager.StopMoveTo(false, 500);
         if ((Me.HaveBuff("Cat Form") 
             || Me.HaveBuff("Bear Form") 
             || Me.HaveBuff("Dire Bear Form")) 
             && FaerieFireFeral.KnownSpell)
         {
+            Main.Log("Pulling with Faerie Fire (Feral)");
             Lua.RunMacroText("/cast Faerie Fire (Feral)()");
             Thread.Sleep(2000);
             return true;
@@ -722,14 +738,15 @@ public static class Druid
             && !Me.HaveBuff("Cat Form")
             && FaerieFireFeral.KnownSpell)
         {
+            Main.Log("Switching to cat form");
             Cast(CatForm);
             return true;
         }
-        else
+        else if (!ObjectManager.Target.HaveBuff("Moonfire"))
         {
-            MovementManager.StopMove();
+            Main.Log("Pulling with Moonfire (Rank 1)");
             Lua.RunMacroText("/cast Moonfire(Rank 1)");
-            Thread.Sleep(3000);
+            return true;
         }
         return false;
     }
