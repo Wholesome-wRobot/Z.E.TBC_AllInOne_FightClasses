@@ -321,7 +321,8 @@ public static class Mage
         }
 
         // Mana Tap
-        if (Target.Mana > 0 && Target.ManaPercentage > 10)
+        if (Target.Mana > 0 
+            && Target.ManaPercentage > 10)
             if (Cast(ManaTap))
                 return;
 
@@ -332,17 +333,21 @@ public static class Mage
                 return;
 
         // Gift of the Naaru
-        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+        if (ObjectManager.GetNumberAttackPlayer() > 1 
+            && Me.HealthPercent < 50)
             if (Cast(GiftOfTheNaaru))
                 return;
 
         // Escape Artist
-        if (Me.Rooted || Me.HaveBuff("Frostnova"))
+        if (Me.Rooted 
+            || Me.HaveBuff("Frostnova"))
             if (Cast(EscapeArtist))
                 return;
 
         // Will of the Forsaken
-        if (Me.HaveBuff("Fear") || Me.HaveBuff("Charm") || Me.HaveBuff("Sleep"))
+        if (Me.HaveBuff("Fear") 
+            || Me.HaveBuff("Charm") 
+            || Me.HaveBuff("Sleep"))
             if (Cast(WillOfTheForsaken))
                 return;
 
@@ -352,22 +357,28 @@ public static class Mage
                 return;
 
         // Summon Water Elemental
-        if (Target.HealthPercent > 95 || ObjectManager.GetNumberAttackPlayer() > 1)
+        if (Target.HealthPercent > 95 
+            || ObjectManager.GetNumberAttackPlayer() > 1)
             if (Cast(SummonWaterElemental))
                 return;
 
         // Ice Barrier
-        if (IceBarrier.IsSpellUsable && !Me.HaveBuff("Ice Barrier"))
+        if (IceBarrier.IsSpellUsable 
+            && !Me.HaveBuff("Ice Barrier"))
             if (Cast(IceBarrier))
                 return;
 
         // Mana Shield
-        if (!Me.HaveBuff("Mana Shield") && ((Me.HealthPercent < 30 && Me.ManaPercentage > 50) || Me.HealthPercent < 10))
+        if (!Me.HaveBuff("Mana Shield") 
+            && ((Me.HealthPercent < 30 && Me.ManaPercentage > 50) 
+            || Me.HealthPercent < 10))
             if (Cast(ManaShield))
                 return;
 
         // Cold Snap
-        if (ObjectManager.GetNumberAttackPlayer() > 1 && !Me.HaveBuff("Icy Veins") && !IcyVeins.IsSpellUsable)
+        if (ObjectManager.GetNumberAttackPlayer() > 1 
+            && !Me.HaveBuff("Icy Veins") 
+            && !IcyVeins.IsSpellUsable)
             if (Cast(ColdSnap))
                 return;
 
@@ -386,7 +397,8 @@ public static class Mage
         }
 
         // Ice Lance
-        if (Target.HaveBuff("Frostbite") || Target.HaveBuff("Frost Nova"))
+        if (Target.HaveBuff("Frostbite") 
+            || Target.HaveBuff("Frost Nova"))
             if (Cast(IceLance))
                 return;
 

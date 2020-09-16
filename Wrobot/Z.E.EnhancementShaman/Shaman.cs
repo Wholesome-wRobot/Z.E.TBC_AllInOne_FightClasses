@@ -78,7 +78,9 @@ public static class Shaman
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
+				if (!Products.InPause 
+                    && !ObjectManager.Me.IsDeadMe 
+                    && !Main.HMPrunningAway)
                 {
                     if (_goInMelee)
                         Main.SetRangeToMelee();
@@ -89,12 +91,20 @@ public static class Shaman
                     totemManager.CheckForTotemicCall();
 
                     // Lesser Healing Wave OOC
-                    if (!Fight.InFight && Me.HealthPercent < 65 && LesserHealingWave.KnownSpell)
+                    if (!Fight.InFight 
+                        && Me.HealthPercent < 65 
+                        && LesserHealingWave.KnownSpell
+                        && _settings.OOCHeal)
                         Cast(LesserHealingWave);
 
                     // Ghost Wolf
-                    if (Me.ManaPercentage > 50 && !Me.IsIndoors && _ghostWolfTimer.ElapsedMilliseconds > 3000
-                        && _settings.UseGhostWolf && !Me.IsMounted && !Fight.InFight && !Me.HaveBuff("Ghost Wolf")
+                    if (Me.ManaPercentage > 50 
+                        && !Me.IsIndoors 
+                        && _ghostWolfTimer.ElapsedMilliseconds > 3000
+                        && _settings.UseGhostWolf 
+                        && !Me.IsMounted 
+                        && !Fight.InFight 
+                        && !Me.HaveBuff("Ghost Wolf")
                         && !ObjectManager.Target.IsFlightMaster)
                     {
                         _ghostWolfTimer.Stop();
@@ -102,13 +112,18 @@ public static class Shaman
                     }
 
                     // Buff rotation
-                    if (!Fight.InFight && ObjectManager.GetNumberAttackPlayer() < 1)
+                    if (!Fight.InFight 
+                        && ObjectManager.GetNumberAttackPlayer() < 1)
                         BuffRotation();
 
                     // Pull & Combat rotation
-                    if (Fight.InFight && ObjectManager.Me.Target > 0UL && ObjectManager.Target.IsAttackable && ObjectManager.Target.IsAlive)
+                    if (Fight.InFight 
+                        && ObjectManager.Me.Target > 0UL 
+                        && ObjectManager.Target.IsAttackable 
+                        && ObjectManager.Target.IsAlive)
                     {
-                        if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
+                        if (ObjectManager.GetNumberAttackPlayer() < 1 
+                            && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
                         else
                             CombatRotation();
@@ -129,12 +144,15 @@ public static class Shaman
         if (!Me.IsMounted && !Me.HaveBuff("Ghost Wolf") && !Me.IsCast)
         {
             // OOC Healing Wave
-            if (Me.HealthPercent < 65 && !LesserHealingWave.KnownSpell)
+            if (Me.HealthPercent < 65 
+                && !LesserHealingWave.KnownSpell
+                && _settings.OOCHeal)
                 if (Cast(HealingWave))
                     return;
 
             // Water Shield
-            if (!Me.HaveBuff("Water Shield") && !Me.HaveBuff("Lightning Shield")
+            if (!Me.HaveBuff("Water Shield") 
+                && !Me.HaveBuff("Lightning Shield")
                 && (_settings.UseWaterShield || !_settings.UseLightningShield || Me.ManaPercentage < 20))
                 if (Cast(WaterShield))
                     return;
@@ -144,10 +162,12 @@ public static class Shaman
     internal static void Pull()
     {
         // Melee ?
-        if (_pullMeleeTimer.ElapsedMilliseconds <= 0 && ObjectManager.Target.GetDistance <= _pullRange + 3)
+        if (_pullMeleeTimer.ElapsedMilliseconds <= 0 
+            && ObjectManager.Target.GetDistance <= _pullRange + 3)
             _pullMeleeTimer.Start();
 
-        if (_pullMeleeTimer.ElapsedMilliseconds > 8000 && !_goInMelee)
+        if (_pullMeleeTimer.ElapsedMilliseconds > 8000 
+            && !_goInMelee)
         {
             _goInMelee = true;
             _pullMeleeTimer.Reset();
@@ -158,14 +178,18 @@ public static class Shaman
             _fightingACaster = true;
 
         // Water Shield
-        if (!Me.HaveBuff("Water Shield") && !Me.HaveBuff("Lightning Shield")
+        if (!Me.HaveBuff("Water Shield") 
+            && !Me.HaveBuff("Lightning Shield")
             && (_settings.UseWaterShield || !_settings.UseLightningShield) || Me.ManaPercentage < _lowManaThreshold)
             if (Cast(WaterShield))
                 return;
 
         // Ligntning Shield
-        if (Me.ManaPercentage > _lowManaThreshold && !Me.HaveBuff("Lightning Shield") && !Me.HaveBuff("Water Shield") 
-            && _settings.UseLightningShield && (!WaterShield.KnownSpell || !_settings.UseWaterShield))
+        if (Me.ManaPercentage > _lowManaThreshold 
+            && !Me.HaveBuff("Lightning Shield") 
+            && !Me.HaveBuff("Water Shield") 
+            && _settings.UseLightningShield 
+            && (!WaterShield.KnownSpell || !_settings.UseWaterShield))
             if (Cast(LightningShield))
                 return;
 
@@ -174,7 +198,8 @@ public static class Shaman
         {
             bool cast = false;
             // pull with rank one
-            if (_settings.PullRankOneLightningBolt && LightningBolt.IsSpellUsable)
+            if (_settings.PullRankOneLightningBolt 
+                && LightningBolt.IsSpellUsable)
             {
                 MovementManager.StopMove();
                 Lua.RunMacroText("/cast Lightning Bolt(Rank 1)");
@@ -182,7 +207,8 @@ public static class Shaman
             }
 
             // pull with max rank
-            if (_settings.PullWithLightningBolt && LightningBolt.IsSpellUsable)
+            if (_settings.PullWithLightningBolt 
+                && LightningBolt.IsSpellUsable)
                 if (Cast(LightningBolt))
                     cast = true;
 
@@ -219,10 +245,12 @@ public static class Shaman
         if (_pullMeleeTimer.ElapsedMilliseconds > 0)
             _pullMeleeTimer.Reset();
 
-        if (_meleeTimer.ElapsedMilliseconds <= 0 && !_goInMelee)
+        if (_meleeTimer.ElapsedMilliseconds <= 0 
+            && !_goInMelee)
             _meleeTimer.Start();
 
-        if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 8000) && !_goInMelee)
+        if ((_shouldBeInterrupted || _meleeTimer.ElapsedMilliseconds > 8000) 
+            && !_goInMelee)
         {
             Main.LogDebug("Going in melee range");
             if (!_casterEnemies.Contains(Target.Name))
@@ -233,12 +261,15 @@ public static class Shaman
         }
 
         // Shamanistic Rage
-        if (!_mediumMana && ((Target.HealthPercent > 80 && !_settings.ShamanisticRageOnMultiOnly) || ObjectManager.GetNumberAttackPlayer() > 1))
+        if (!_mediumMana 
+            && ((Target.HealthPercent > 80 && !_settings.ShamanisticRageOnMultiOnly) 
+            || ObjectManager.GetNumberAttackPlayer() > 1))
             if (Cast(ShamanisticRage))
                 return;
 
         // Gift of the Naaru
-        if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.HealthPercent < 50)
+        if (ObjectManager.GetNumberAttackPlayer() > 1 
+            && Me.HealthPercent < 50)
             if (Cast(GiftOfTheNaaru))
                 return;
 
@@ -253,17 +284,22 @@ public static class Shaman
                 return;
 
         // Warstomp
-        if (ObjectManager.GetNumberAttackPlayer() > 1 && Target.GetDistance < 8)
+        if (ObjectManager.GetNumberAttackPlayer() > 1 
+            && Target.GetDistance < 8)
             if (Cast(WarStomp))
                 return;
 
         // Lesser Healing Wave
-        if (Me.HealthPercent < 50 && LesserHealingWave.KnownSpell && (Target.HealthPercent > 15 || Me.HealthPercent < 25))
+        if (Me.HealthPercent < 50 
+            && LesserHealingWave.KnownSpell 
+            && (Target.HealthPercent > 15 || Me.HealthPercent < 25))
             if (Cast(LesserHealingWave))
                 return;
 
         // Healing Wave
-        if (Me.HealthPercent < 50 && !LesserHealingWave.KnownSpell && (Target.HealthPercent > 15 || Me.HealthPercent < 25))
+        if (Me.HealthPercent < 50 
+            && !LesserHealingWave.KnownSpell 
+            && (Target.HealthPercent > 15 || Me.HealthPercent < 25))
             if (Cast(HealingWave))
                 return;
 
@@ -284,13 +320,24 @@ public static class Shaman
         }
 
         // Lightning Shield
-        if (!_lowMana && !Me.HaveBuff("Lightning Shield") && !Me.HaveBuff("Water Shield") && _settings.UseLightningShield 
+        if (!_lowMana && !Me.HaveBuff("Lightning Shield") 
+            && !Me.HaveBuff("Water Shield") 
+            && _settings.UseLightningShield 
             && (!WaterShield.KnownSpell || !_settings.UseWaterShield))
             if (Cast(LightningShield))
                 return;
 
+        // Frost Shock
+        if ((Target.CreatureTypeTarget == "Humanoid" || Target.Name.Contains("Plainstrider"))
+            && _settings.FrostShockHumanoids
+            && Target.HealthPercent < 40
+            && !Target.HaveBuff("Frost Shock"))
+            if (Cast(FrostShock))
+                return;
+
         // Earth Shock Interupt Rank 1
-        if (_shouldBeInterrupted && Target.GetDistance < 19f 
+        if (_shouldBeInterrupted 
+            && Target.GetDistance < 19f 
             && (_settings.InterruptWithRankOne || _lowMana))
         {
             _fightingACaster = true;
@@ -302,7 +349,9 @@ public static class Shaman
         }
 
         // Earth Shock Interupt
-        if (_shouldBeInterrupted && Target.GetDistance < 19f && !_settings.InterruptWithRankOne)
+        if (_shouldBeInterrupted 
+            && Target.GetDistance < 19f 
+            && !_settings.InterruptWithRankOne)
         {
             if (!_casterEnemies.Contains(Target.Name))
                 _casterEnemies.Add(Target.Name);
@@ -313,35 +362,47 @@ public static class Shaman
         }
 
         // Water Shield
-        if (!Me.HaveBuff("Water Shield") && !Me.HaveBuff("Lightning Shield")
+        if (!Me.HaveBuff("Water Shield") 
+            && !Me.HaveBuff("Lightning Shield")
             && (_settings.UseWaterShield || !_settings.UseLightningShield || _lowMana))
             if (Cast(WaterShield))
                 return;
 
         // Flame Shock DPS
-        if (!_lowMana && Target.GetDistance < 19f && !Target.HaveBuff("Flame Shock") 
-            && Target.HealthPercent > 20 && !_fightingACaster && _settings.UseFlameShock)
+        if (!_lowMana 
+            && Target.GetDistance < 19f 
+            && !Target.HaveBuff("Flame Shock") 
+            && Target.HealthPercent > 20 
+            && !_fightingACaster && _settings.UseFlameShock)
             if (Cast(FlameShock))
                 return;
 
         // Totems
-        if (!_lowMana && Target.GetDistance < 20)
+        if (!_lowMana 
+            && Target.GetDistance < 20)
             if (totemManager.CastTotems())
                 return;
 
         // Stormstrike
-        if (!_lowMana && Stormstrike.IsDistanceGood)
+        if (!_lowMana 
+            && Stormstrike.IsDistanceGood)
             if (Cast(Stormstrike))
                 return;
 
         // Earth Shock DPS
-        if (!_lowMana && Target.GetDistance < 19f && !FlameShock.KnownSpell 
-            && Target.HealthPercent > 25 && Me.ManaPercentage > 30)
+        if (!_lowMana 
+            && Target.GetDistance < 19f 
+            && !FlameShock.KnownSpell 
+            && Target.HealthPercent > 25 
+            && Me.ManaPercentage > 30)
             if (Cast(EarthShock))
                 return;
 
         // Low level lightning bolt
-        if (!EarthShock.KnownSpell && Me.ManaPercentage > 30 && !_lowMana && Target.GetDistance < 29f
+        if (!EarthShock.KnownSpell 
+            && Me.ManaPercentage > 30 
+            && !_lowMana 
+            && Target.GetDistance < 29f
             && Target.HealthPercent > 40)
             if (Cast(LightningBolt))
                 return;
@@ -360,6 +421,7 @@ public static class Shaman
     private static Spell RockbiterWeapon = new Spell("Rockbiter Weapon");
     private static Spell EarthShock = new Spell("Earth Shock");
     private static Spell FlameShock = new Spell("Flame Shock");
+    private static Spell FrostShock = new Spell("Frost Shock");
     private static Spell LightningShield = new Spell("Lightning Shield");
     private static Spell WaterShield = new Spell("Water Shield");
     private static Spell GhostWolf = new Spell("Ghost Wolf");

@@ -33,6 +33,8 @@ public class ZEShamanSettings : Settings
         ShamanisticRageOnMultiOnly = true;
         UseWaterShield = true;
         ActivateCombatDebug = false;
+        OOCHeal = true;
+        FrostShockHumanoids = true;
 
         ConfigWinForm(
             new System.Drawing.Point(400, 400), "WholesomeTBCShaman "
@@ -72,6 +74,12 @@ public class ZEShamanSettings : Settings
 
     [Category("Misc")]
     [DefaultValue(true)]
+    [DisplayName("Out of combat healing")]
+    [Description("Heal when out of combat")]
+    public bool OOCHeal { get; set; }
+
+    [Category("Misc")]
+    [DefaultValue(true)]
     [DisplayName("Use Totemic Call")]
     [Description("Use Totemic Call")]
     public bool UseTotemicCall { get; set; }
@@ -81,6 +89,12 @@ public class ZEShamanSettings : Settings
     [DisplayName("Use Magma Totem")]
     [Description("Use Magma Totem on multi aggro")]
     public bool UseMagmaTotem { get; set; }
+
+    [Category("Combat Rotation")]
+    [DefaultValue(true)]
+    [DisplayName("Frost Shock Humanoids")]
+    [Description("Use Frost Shock on low HP humanoids to keep them from fleeing")]
+    public bool FrostShockHumanoids { get; set; }
 
     [Category("Combat Rotation")]
     [DefaultValue(true)]
