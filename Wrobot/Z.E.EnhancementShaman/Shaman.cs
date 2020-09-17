@@ -24,7 +24,6 @@ public static class Shaman
     private static float _pullRange = 28f;
     internal static int _lowManaThreshold = 20;
     internal static int _mediumManaThreshold = 50;
-    internal static int _highManaThreshold = 80;
     static List<string> _casterEnemies = new List<string>();
     static TotemManager totemManager = new TotemManager();
 
@@ -223,7 +222,6 @@ public static class Shaman
     {
         bool _lowMana = Me.ManaPercentage <= _lowManaThreshold;
         bool _mediumMana = Me.ManaPercentage >= _mediumManaThreshold;
-        bool _highMana = Me.ManaPercentage >= _highManaThreshold;
         bool _isPoisoned = ToolBox.HasPoisonDebuff();
         bool _hasDisease = ToolBox.HasDiseaseDebuff();
         bool _shouldBeInterrupted = false;
@@ -262,8 +260,7 @@ public static class Shaman
 
         // Shamanistic Rage
         if (!_mediumMana 
-            && ((Target.HealthPercent > 80 && !_settings.ShamanisticRageOnMultiOnly) 
-            || ObjectManager.GetNumberAttackPlayer() > 1))
+            && ((Target.HealthPercent > 80 && !_settings.ShamanisticRageOnMultiOnly) || ObjectManager.GetNumberAttackPlayer() > 1))
             if (Cast(ShamanisticRage))
                 return;
 

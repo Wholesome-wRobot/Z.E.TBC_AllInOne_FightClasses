@@ -12,7 +12,7 @@ using System.ComponentModel;
 
 public static class Druid
 {
-    private static float _pullRange = 28f;
+    private static float _pullRange = 27f;
     private static bool _isStealthApproching;
     internal static Stopwatch _pullMeleeTimer = new Stopwatch();
     internal static Stopwatch _meleeTimer = new Stopwatch();
@@ -742,12 +742,16 @@ public static class Druid
             Cast(CatForm);
             return true;
         }
-        else if (!ObjectManager.Target.HaveBuff("Moonfire"))
+        else if (Moonfire.KnownSpell 
+            && !ObjectManager.Target.HaveBuff("Moonfire"))
         {
             Main.Log("Pulling with Moonfire (Rank 1)");
             Lua.RunMacroText("/cast Moonfire(Rank 1)");
             return true;
         }
+        else if (Cast(Wrath))
+            return true;
+
         return false;
     }
 
