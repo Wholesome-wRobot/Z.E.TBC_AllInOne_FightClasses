@@ -743,7 +743,8 @@ public static class Druid
             return true;
         }
         else if (Moonfire.KnownSpell 
-            && !ObjectManager.Target.HaveBuff("Moonfire"))
+            && !ObjectManager.Target.HaveBuff("Moonfire")
+            && ObjectManager.Me.Level >= 10)
         {
             Main.Log("Pulling with Moonfire (Rank 1)");
             Lua.RunMacroText("/cast Moonfire(Rank 1)");
