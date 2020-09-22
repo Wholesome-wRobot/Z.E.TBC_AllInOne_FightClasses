@@ -36,7 +36,8 @@ public static class Mage
             _isBackingUp = false;
             _iCanUseWand = false;
             _usingWand = false;
-            _polymorphableEnemyInThisFight = true;
+            _polymorphableEnemyInThisFight = false;
+            _isPolymorphing = false;
             Main.SetRange(_distanceRange);
 
             if (!Fight.InFight 

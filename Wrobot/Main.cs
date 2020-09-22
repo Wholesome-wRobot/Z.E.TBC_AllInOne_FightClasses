@@ -19,9 +19,10 @@ public class Main : ICustomClass
     public static string wowClass = ObjectManager.Me.WowClass.ToString();
     public static int _humanReflexTime = 500;
     public static bool _isLaunched;
-    public static string version = "1.5.42"; // Must match version in Version.txt
+    public static string version = "1.5.5"; // Must match version in Version.txt
     public bool haveCheckedForUpdate = false;
     public static bool HMPrunningAway = false;
+    public static string wowVersion;
 
     public float Range
 	{
@@ -35,6 +36,9 @@ public class Main : ICustomClass
 
         Log($"FC version {version}. Discovering class and finding rotation...");
         var type = Type.GetType(wowClass);
+
+        wowVersion = Lua.LuaDoString<string>("v, b, d, t = GetBuildInfo(); return v");
+        Log($"Wow version : {wowVersion}");
 
         if (type != null)
         {

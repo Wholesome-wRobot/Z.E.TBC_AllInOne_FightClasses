@@ -449,7 +449,7 @@ public static class Druid
 
         // Catorm
         if (!Me.HaveBuff("Cat Form") 
-            && (ObjectManager.GetNumberAttackPlayer() < _settings.NumberOfAttackersBearForm || !BearForm.KnownSpell))
+            && (ObjectManager.GetNumberAttackPlayer() < _settings.NumberOfAttackersBearForm || (!BearForm.KnownSpell && !DireBearForm.KnownSpell)))
             if (Cast(CatForm))
                 return;
 
