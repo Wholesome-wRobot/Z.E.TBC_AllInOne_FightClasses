@@ -593,8 +593,8 @@ public static class Warlock
                 return;
 
         // Shadow Bolt
-        if ((!_settings.PrioritizeWandingOverSB || !_iCanUseWand) && 
-            (ObjectManager.Target.HealthPercent > 50 || (Me.ManaPercentage > 90 && ObjectManager.Target.HealthPercent > 10)) 
+        if ((!_settings.PrioritizeWandingOverSB || !_iCanUseWand) 
+            && (ObjectManager.Target.HealthPercent > 50 || (Me.ManaPercentage > 90 && ObjectManager.Target.HealthPercent > 10)) 
             && _myManaPC > 40 
             && ObjectManager.Target.GetDistance < _maxRange)
             if (Cast(ShadowBolt))
