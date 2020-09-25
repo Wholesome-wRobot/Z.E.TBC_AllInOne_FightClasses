@@ -112,7 +112,8 @@ public static class Shaman
 
                     // Buff rotation
                     if (!Fight.InFight 
-                        && ObjectManager.GetNumberAttackPlayer() < 1)
+                        && ObjectManager.GetNumberAttackPlayer() < 1
+                        && !Me.InCombatFlagOnly)
                         BuffRotation();
 
                     // Pull & Combat rotation
@@ -202,11 +203,13 @@ public static class Shaman
             {
                 MovementManager.StopMove();
                 Lua.RunMacroText("/cast Lightning Bolt(Rank 1)");
+                Usefuls.WaitIsCasting();
                 cast = true;
             }
 
             // pull with max rank
             if (_settings.PullWithLightningBolt 
+                && !_settings.PullRankOneLightningBolt
                 && LightningBolt.IsSpellUsable)
                 if (Cast(LightningBolt))
                     cast = true;
@@ -370,7 +373,8 @@ public static class Shaman
             && Target.GetDistance < 19f 
             && !Target.HaveBuff("Flame Shock") 
             && Target.HealthPercent > 20 
-            && !_fightingACaster && _settings.UseFlameShock)
+            && !_fightingACaster 
+            && _settings.UseFlameShock)
             if (Cast(FlameShock))
                 return;
 

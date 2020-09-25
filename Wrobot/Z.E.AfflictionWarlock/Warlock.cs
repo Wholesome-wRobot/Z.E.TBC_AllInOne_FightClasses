@@ -61,6 +61,10 @@ public static class Warlock
             // Imp Firebolt
             if (PetAndConsumables.MyWarlockPet().Equals("Imp"))
                 ToolBox.TogglePetSpellAuto("Firebolt", true);
+
+            // Imp BloodPact
+            if (PetAndConsumables.MyWarlockPet().Equals("Imp"))
+                ToolBox.TogglePetSpellAuto("Blood Pact", true);
         };
 
         Rotation();

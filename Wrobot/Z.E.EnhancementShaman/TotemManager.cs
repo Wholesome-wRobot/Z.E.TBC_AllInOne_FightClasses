@@ -55,8 +55,10 @@ class TotemManager
                 (@"local haveTotem, totemName, startTime, duration = GetTotemInfo(2); return totemName;");
 
             // Earth Elemental Totem on multiaggro
-            if (ObjectManager.GetNumberAttackPlayer() > 1 && EarthElementalTotem.KnownSpell
-                && !currentEarthTotem.Contains("Stoneclaw Totem") && !currentEarthTotem.Contains("Earth Elemental Totem"))
+            if (ObjectManager.GetNumberAttackPlayer() > 1 
+                && EarthElementalTotem.KnownSpell
+                && !currentEarthTotem.Contains("Stoneclaw Totem") 
+                && !currentEarthTotem.Contains("Earth Elemental Totem"))
             {
                 {
                     if (Cast(EarthElementalTotem))
@@ -65,8 +67,10 @@ class TotemManager
             }
 
             // Stoneclaw on multiaggro
-            if (ObjectManager.GetNumberAttackPlayer() > 1 && StoneclawTotem.KnownSpell
-                && !currentEarthTotem.Contains("Stoneclaw Totem") && !currentEarthTotem.Contains("Earth Elemental Totem"))
+            if (ObjectManager.GetNumberAttackPlayer() > 1 
+                && StoneclawTotem.KnownSpell
+                && !currentEarthTotem.Contains("Stoneclaw Totem") 
+                && !currentEarthTotem.Contains("Earth Elemental Totem"))
             {
                 {
                     if (Cast(StoneclawTotem))
@@ -75,8 +79,10 @@ class TotemManager
             }
 
             // Strenght of Earth totem
-            if (!Shaman._settings.UseStoneSkinTotem && !Me.HaveBuff("Strength of Earth")
-                && !currentEarthTotem.Contains("Stoneclaw Totem") && !currentEarthTotem.Contains("Earth Elemental Totem"))
+            if ((!Shaman._settings.UseStoneSkinTotem || !StoneskinTotem.KnownSpell)
+                && !Me.HaveBuff("Strength of Earth")
+                && !currentEarthTotem.Contains("Stoneclaw Totem") 
+                && !currentEarthTotem.Contains("Earth Elemental Totem"))
             {
                 {
                     if (Cast(StrengthOfEarthTotem))
@@ -85,8 +91,10 @@ class TotemManager
             }
 
             // Stoneskin Totem
-            if (Shaman._settings.UseStoneSkinTotem && !Me.HaveBuff("Stoneskin")
-                && !currentEarthTotem.Contains("Stoneclaw Totem") && !currentEarthTotem.Contains("Earth Elemental Totem"))
+            if ((Shaman._settings.UseStoneSkinTotem || !StrengthOfEarthTotem.KnownSpell)
+                && !Me.HaveBuff("Stoneskin")
+                && !currentEarthTotem.Contains("Stoneclaw Totem") 
+                && !currentEarthTotem.Contains("Earth Elemental Totem"))
             {
                 {
                     if (Cast(StoneskinTotem))
@@ -105,8 +113,11 @@ class TotemManager
                 (@"local haveTotem, totemName, startTime, duration = GetTotemInfo(1); return totemName;");
 
             // Magma Totem
-            if (ObjectManager.GetNumberAttackPlayer() > 1 && Me.ManaPercentage > Shaman._mediumManaThreshold && ObjectManager.Target.GetDistance < 10
-                && !currentFireTotem.Contains("Magma Totem") && Shaman._settings.UseMagmaTotem)
+            if (ObjectManager.GetNumberAttackPlayer() > 1 
+                && Me.ManaPercentage > Shaman._mediumManaThreshold 
+                && ObjectManager.Target.GetDistance < 10
+                && !currentFireTotem.Contains("Magma Totem") 
+                && Shaman._settings.UseMagmaTotem)
             {
                 if (Cast(MagmaTotem))
                     return true;
@@ -114,7 +125,8 @@ class TotemManager
 
             // Searing Totem
             if ((!currentFireTotem.Contains("Searing Totem") || Shaman._fireTotemPosition == null || Me.Position.DistanceTo(Shaman._fireTotemPosition) > 15f)
-                && ObjectManager.Target.GetDistance < 10 && !currentFireTotem.Contains("Magma Totem"))
+                && ObjectManager.Target.GetDistance < 10 
+                && !currentFireTotem.Contains("Magma Totem"))
             {
                 if (Cast(SearingTotem))
                 {
