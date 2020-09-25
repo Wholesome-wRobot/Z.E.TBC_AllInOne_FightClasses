@@ -207,7 +207,9 @@ public static class Mage
                     if (_polymorphedEnemy != null && !ObjectManager.Me.InCombatFlagOnly)
                         _polymorphedEnemy = null;
 
-                    if (!Fight.InFight && !ObjectManager.Me.InCombatFlagOnly && !Me.IsMounted)
+                    if (!Fight.InFight 
+                        && !ObjectManager.Me.InCombatFlagOnly 
+                        && !Me.IsMounted)
                         BuffRotation();
 
                     if (Fight.InFight 

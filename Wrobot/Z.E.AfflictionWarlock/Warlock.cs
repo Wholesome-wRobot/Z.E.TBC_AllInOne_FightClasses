@@ -57,6 +57,10 @@ public static class Warlock
             if (UseWand.IsSpellUsable)
                 _iCanUseWand = true;
             Lua.LuaDoString("PetDefensiveMode();");
+
+            // Imp Firebolt
+            if (PetAndConsumables.MyWarlockPet().Equals("Imp"))
+                ToolBox.TogglePetSpellAuto("Firebolt", true);
         };
 
         Rotation();
@@ -82,8 +86,10 @@ public static class Warlock
                     && ObjectManager.Pet.IsValid && !Main.HMPrunningAway)
                 {
                     // Voidwalker Torment
-                    if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") && ObjectManager.Target.Target == Me.Guid
-                        && Me.InCombatFlagOnly && !_settings.AutoTorment)
+                    if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") 
+                        && ObjectManager.Target.Target == Me.Guid
+                        && Me.InCombatFlagOnly 
+                        && !_settings.AutoTorment)
                         ToolBox.PetSpellCast("Torment");
                 }
             }
