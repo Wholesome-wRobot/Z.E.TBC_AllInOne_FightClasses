@@ -112,16 +112,22 @@ public static class Warlock
 		{
 			try
 			{
-				if (!Products.InPause && !ObjectManager.Me.IsDeadMe && !Main.HMPrunningAway)
+				if (!Products.InPause 
+                    && !ObjectManager.Me.IsDeadMe 
+                    && !Main.HMPrunningAway)
                 {
                     if (!Me.InCombatFlagOnly)
                     {
                         BuffRotation();
                     }
 
-                    if (Fight.InFight && ObjectManager.Me.Target > 0UL && ObjectManager.Target.IsAttackable && ObjectManager.Target.IsAlive)
+                    if (Fight.InFight 
+                        && ObjectManager.Me.Target > 0UL 
+                        && ObjectManager.Target.IsAttackable 
+                        && ObjectManager.Target.IsAlive)
                     {
-                        if (ObjectManager.GetNumberAttackPlayer() < 1 && !ObjectManager.Target.InCombatFlagOnly)
+                        if (ObjectManager.GetNumberAttackPlayer() < 1 
+                            && !ObjectManager.Target.InCombatFlagOnly)
                             Pull();
                         else
                             CombatRotation();
@@ -142,8 +148,10 @@ public static class Warlock
         if (!Me.IsMounted)
         {
             // Make sure we have mana to summon
-            if (!ObjectManager.Pet.IsValid && ObjectManager.Me.ManaPercentage < 95 && !ObjectManager.Me.HaveBuff("Drink") &&
-                ((SummonVoidwalker.KnownSpell && !SummonVoidwalker.IsSpellUsable) && ToolBox.CountItemStacks("Soul Shard") > 0 ||
+            if (!ObjectManager.Pet.IsValid 
+                && ObjectManager.Me.ManaPercentage < 95 
+                && !ObjectManager.Me.HaveBuff("Drink") 
+                && (SummonVoidwalker.KnownSpell && !SummonVoidwalker.IsSpellUsable && ToolBox.CountItemStacks("Soul Shard") > 0 ||
                 (SummonImp.KnownSpell && !SummonImp.IsSpellUsable && !SummonVoidwalker.KnownSpell)))
             {
                 Main.Log("Not enough mana to summon, forcing regen");
@@ -177,7 +185,8 @@ public static class Warlock
             }
 
             // Summon Felguard for mana or health
-            if (SummonFelguard.KnownSpell && (ObjectManager.Pet.ManaPercentage < 20 || ObjectManager.Pet.HealthPercent < 20) 
+            if (SummonFelguard.KnownSpell 
+                && (ObjectManager.Pet.ManaPercentage < 20 || ObjectManager.Pet.HealthPercent < 20) 
                 && ObjectManager.Pet.IsValid)
             {
                 Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
@@ -191,7 +200,8 @@ public static class Warlock
             }
 
             // Summon Void Walker
-            if ((!ObjectManager.Pet.IsValid || !PetAndConsumables.MyWarlockPet().Equals("Voidwalker")) && SummonVoidwalker.KnownSpell
+            if ((!ObjectManager.Pet.IsValid || !PetAndConsumables.MyWarlockPet().Equals("Voidwalker")) 
+                && SummonVoidwalker.KnownSpell
                 && !SummonFelguard.KnownSpell)
             {
                 Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
@@ -205,7 +215,9 @@ public static class Warlock
             }
 
             // Summon Void Walker for mana
-            if ((PetAndConsumables.MyWarlockPet().Equals("Voidwalker")) && SummonVoidwalker.KnownSpell && ObjectManager.Pet.ManaPercentage < 20
+            if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") 
+                && SummonVoidwalker.KnownSpell 
+                && ObjectManager.Pet.ManaPercentage < 20
                 && !SummonFelguard.KnownSpell)
             {
                 Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
@@ -219,8 +231,8 @@ public static class Warlock
             }
 
             // Summon Imp
-            if (!ObjectManager.Pet.IsValid && SummonImp.KnownSpell && 
-                (!SummonVoidwalker.KnownSpell || ToolBox.CountItemStacks("Soul Shard") < 1))
+            if (!ObjectManager.Pet.IsValid && SummonImp.KnownSpell 
+                && (!SummonVoidwalker.KnownSpell || ToolBox.CountItemStacks("Soul Shard") < 1))
             {
                 Thread.Sleep(Usefuls.Latency + 500); // Safety for Mount check
                 if (!ObjectManager.Me.IsMounted)
@@ -233,12 +245,15 @@ public static class Warlock
             }
 
             // Life Tap
-            if (Me.HealthPercent > Me.ManaPercentage && _settings.UseLifeTap)
+            if (Me.HealthPercent > Me.ManaPercentage 
+                && _settings.UseLifeTap)
                 if (Cast(LifeTap))
                     return;
 
             // Unending Breath
-            if (!Me.HaveBuff("Unending Breath") && UnendingBreath.KnownSpell && UnendingBreath.IsSpellUsable 
+            if (!Me.HaveBuff("Unending Breath") 
+                && UnendingBreath.KnownSpell 
+                && UnendingBreath.IsSpellUsable 
                 && _settings.UseUnendingBreath)
             {
                 Lua.RunMacroText("/target player");
@@ -250,33 +265,43 @@ public static class Warlock
             }
 
             // Demon Skin
-            if (!Me.HaveBuff("Demon Skin") && !DemonArmor.KnownSpell && DemonSkin.KnownSpell)
+            if (!Me.HaveBuff("Demon Skin") 
+                && !DemonArmor.KnownSpell 
+                && DemonSkin.KnownSpell)
                 if (Cast(DemonSkin))
                     return;
             
             // Demon Armor
-            if ((!Me.HaveBuff("Demon Armor") || Me.HaveBuff("Demon Skin")) && DemonArmor.KnownSpell && 
-                (!FelArmor.KnownSpell || (FelArmor.KnownSpell && !_settings.UseFelArmor)))
+            if ((!Me.HaveBuff("Demon Armor") || Me.HaveBuff("Demon Skin")) 
+                && DemonArmor.KnownSpell 
+                && (!FelArmor.KnownSpell || (FelArmor.KnownSpell && !_settings.UseFelArmor)))
                 if (Cast(DemonArmor))
                     return;
 
             // Soul Link
-            if (SoulLink.KnownSpell && !Me.HaveBuff("Soul Link"))
+            if (SoulLink.KnownSpell 
+                && !Me.HaveBuff("Soul Link"))
                 if (Cast(SoulLink))
                     return;
 
             // Fel Armor
-            if (!Me.HaveBuff("Fel Armor") && FelArmor.KnownSpell && _settings.UseFelArmor)
+            if (!Me.HaveBuff("Fel Armor") 
+                && FelArmor.KnownSpell 
+                && _settings.UseFelArmor)
                 if (Cast(FelArmor))
                     return;
 
             // Health Funnel
-            if (ObjectManager.Pet.HealthPercent < 50 && Me.HealthPercent > 40 && ObjectManager.Pet.GetDistance < 19
-                && !ObjectManager.Pet.InCombatFlagOnly && HealthFunnel.KnownSpell)
+            if (ObjectManager.Pet.HealthPercent < 50 
+                && Me.HealthPercent > 40 
+                && ObjectManager.Pet.GetDistance < 19
+                && !ObjectManager.Pet.InCombatFlagOnly 
+                && HealthFunnel.KnownSpell)
             {
                 Fight.StopFight();
                 MovementManager.StopMove();
-                if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") && ToolBox.GetPetSpellIndex("Consume Shadows") != 0)
+                if (PetAndConsumables.MyWarlockPet().Equals("Voidwalker") 
+                    && ToolBox.GetPetSpellIndex("Consume Shadows") != 0)
                 {
                     ToolBox.PetSpellCast("Consume Shadows");
                     Usefuls.WaitIsCasting();
@@ -302,12 +327,15 @@ public static class Warlock
                     return;
 
             // Create Soul Stone
-            if (!PetAndConsumables.HaveSoulstone() && CreateSoulstone.KnownSpell)
+            if (!PetAndConsumables.HaveSoulstone() 
+                && CreateSoulstone.KnownSpell)
                 if (Cast(CreateSoulstone))
                     return;
 
             // Use Soul Stone
-            if (!Me.HaveBuff("Soulstone Resurrection") && CreateSoulstone.KnownSpell && ToolBox.HaveOneInList(PetAndConsumables.SoulStones())
+            if (!Me.HaveBuff("Soulstone Resurrection") 
+                && CreateSoulstone.KnownSpell 
+                && ToolBox.HaveOneInList(PetAndConsumables.SoulStones())
                 && ToolBox.GetItemCooldown(PetAndConsumables.SoulStones()) <= 0)
             {
                 MovementManager.StopMove();
@@ -334,41 +362,53 @@ public static class Warlock
             Lua.LuaDoString("PetAttack();", false);
 
         // Life Tap
-        if (Me.HealthPercent > Me.ManaPercentage && _settings.UseLifeTap)
+        if (Me.HealthPercent > Me.ManaPercentage 
+            && _settings.UseLifeTap)
             if (Cast(LifeTap))
                 return;
 
         // Amplify Curse
-        if (AmplifyCurse.IsSpellUsable && AmplifyCurse.KnownSpell)
+        if (AmplifyCurse.IsSpellUsable 
+            && AmplifyCurse.KnownSpell)
             AmplifyCurse.Launch();
 
         // Siphon Life
-        if (Me.HealthPercent < 90 && _settings.UseSiphonLife && ObjectManager.Target.GetDistance < _maxRange + 2)
+        if (Me.HealthPercent < 90 
+            && _settings.UseSiphonLife
+            && !ObjectManager.Target.HaveBuff("Siphon Life")
+            && ObjectManager.Target.GetDistance < _maxRange + 2)
             if (Cast(SiphonLife))
                 return;
 
         // Unstable Affliction
-        if (ObjectManager.Target.GetDistance < _maxRange + 2)
+        if (ObjectManager.Target.GetDistance < _maxRange + 2
+            && !ObjectManager.Target.HaveBuff("Unstable Affliction"))
             if (Cast(UnstableAffliction))
                 return;
 
         // Curse of Agony
-        if (ObjectManager.Target.GetDistance < _maxRange + 2)
+        if (ObjectManager.Target.GetDistance < _maxRange + 2
+            && !ObjectManager.Target.HaveBuff("Curse of Agony"))
             if (Cast(CurseOfAgony))
                 return;
 
         // Corruption
-        if (ObjectManager.Target.GetDistance < _maxRange + 2)
+        if (ObjectManager.Target.GetDistance < _maxRange + 2
+            && !ObjectManager.Target.HaveBuff("Corruption"))
             if (Cast(Corruption))
                 return;
 
         // Immolate
-        if (ObjectManager.Target.GetDistance < _maxRange + 2 && !Corruption.KnownSpell && ToolBox.CanBleed(ObjectManager.Target))
+        if (ObjectManager.Target.GetDistance < _maxRange + 2
+            && !ObjectManager.Target.HaveBuff("Immolate")
+            && !Corruption.KnownSpell 
+            && ToolBox.CanBleed(ObjectManager.Target))
             if (Cast(Immolate))
                 return;
 
         // Shadow Bolt
-        if (ObjectManager.Target.GetDistance < _maxRange + 2 && !Immolate.KnownSpell)
+        if (ObjectManager.Target.GetDistance < _maxRange + 2 
+            && !Immolate.KnownSpell)
             if (Cast(ShadowBolt))
                 return;
     }
@@ -445,7 +485,8 @@ public static class Warlock
                 return;
 
         // Drain Soul
-        if (ToolBox.CountItemStacks("Soul Shard") < _settings.NumberOfSoulShards && Target.HealthPercent < 40)
+        if (ToolBox.CountItemStacks("Soul Shard") < _settings.NumberOfSoulShards 
+            && Target.HealthPercent < 40)
             if (Cast(DrainSoul))
                 return;
 
@@ -459,8 +500,11 @@ public static class Warlock
                 return;
 
         // Siphon Life
-        if (Me.HealthPercent < 90 && _overLowManaThreshold && Target.HealthPercent > 20
-            && !Target.HaveBuff("Siphon Life") && _settings.UseSiphonLife)
+        if (Me.HealthPercent < 90 
+            && _overLowManaThreshold 
+            && Target.HealthPercent > 20
+            && !Target.HaveBuff("Siphon Life") 
+            && _settings.UseSiphonLife)
             if (Cast(SiphonLife))
                 return;
 
@@ -470,42 +514,55 @@ public static class Warlock
                 return;
 
         // Drain Life low
-        if (Me.HealthPercent < 30 && Target.HealthPercent > 20)
+        if (Me.HealthPercent < 30 
+            && Target.HealthPercent > 20)
             if (Cast(DrainLife))
                 return;
 
         // Curse of Agony
-        if (ObjectManager.Target.GetDistance < _maxRange && !Target.HaveBuff("Curse of Agony") && _overLowManaThreshold
+        if (ObjectManager.Target.GetDistance < _maxRange 
+            && !Target.HaveBuff("Curse of Agony") 
+            && _overLowManaThreshold
             && Target.HealthPercent > 20)
             if (Cast(CurseOfAgony))
                 return;
 
         // Unstable Affliction
-        if (ObjectManager.Target.GetDistance < _maxRange && !Target.HaveBuff("Unstable Affliction") && _overLowManaThreshold
+        if (ObjectManager.Target.GetDistance < _maxRange 
+            && !Target.HaveBuff("Unstable Affliction") 
+            && _overLowManaThreshold
             && Target.HealthPercent > 30)
             if (Cast(UnstableAffliction))
                 return;
 
         // Corruption
-        if (ObjectManager.Target.GetDistance < _maxRange && !Target.HaveBuff("Corruption") && _overLowManaThreshold
+        if (ObjectManager.Target.GetDistance < _maxRange 
+            && !Target.HaveBuff("Corruption") 
+            && _overLowManaThreshold
             && Target.HealthPercent > 20)
             if (Cast(Corruption))
                 return;
 
         // Immolate
-        if (ObjectManager.Target.GetDistance < _maxRange && !Target.HaveBuff("Immolate") && _overLowManaThreshold
-            && Target.HealthPercent > 30 && (_settings.UseImmolateHighLevel || !UnstableAffliction.KnownSpell)
+        if (ObjectManager.Target.GetDistance < _maxRange 
+            && !Target.HaveBuff("Immolate") 
+            && _overLowManaThreshold
+            && Target.HealthPercent > 30 
+            && (_settings.UseImmolateHighLevel || !UnstableAffliction.KnownSpell)
             && ToolBox.CanBleed(ObjectManager.Target))
             if (Cast(Immolate))
                 return;
 
         // Drain Life high
-        if (Me.HealthPercent < 70 && Target.HealthPercent > 20)
+        if (Me.HealthPercent < 70 
+            && Target.HealthPercent > 20)
             if (Cast(DrainLife))
                 return;
 
         // Health Funnel
-        if (ObjectManager.Pet.IsValid && ObjectManager.Pet.HealthPercent < 30 && Me.HealthPercent > 30)
+        if (ObjectManager.Pet.IsValid 
+            && ObjectManager.Pet.HealthPercent < 30 
+            && Me.HealthPercent > 30)
         {
             Main.SetRange(19f);
             if (HealthFunnel.IsDistanceGood && Cast(HealthFunnel))
@@ -513,31 +570,40 @@ public static class Warlock
         }
 
         // Dark Pact
-        if (Me.ManaPercentage < 70 && ObjectManager.Pet.Mana > 0 && ObjectManager.Pet.ManaPercentage > 60
+        if (Me.ManaPercentage < 70 
+            && ObjectManager.Pet.Mana > 0 
+            && ObjectManager.Pet.ManaPercentage > 60
             && _settings.UseDarkPact)
             if (Cast(DarkPact))
                 return;
 
         // Drain Mana
-        if (Me.ManaPercentage < 70 && Target.Mana > 0 && Target.ManaPercentage > 30)
+        if (Me.ManaPercentage < 70 
+            && Target.Mana > 0 
+            && Target.ManaPercentage > 30)
             if (Cast(DrainMana))
                 return;
 
         // Incinerate
-        if (ObjectManager.Target.GetDistance < _maxRange && Target.HaveBuff("Immolate") && _overLowManaThreshold
-            && Target.HealthPercent > 30 && (_settings.UseIncinerate))
+        if (ObjectManager.Target.GetDistance < _maxRange && Target.HaveBuff("Immolate") 
+            && _overLowManaThreshold
+            && Target.HealthPercent > 30 
+            && (_settings.UseIncinerate))
             if (Cast(Incinerate))
                 return;
 
         // Shadow Bolt
         if ((!_settings.PrioritizeWandingOverSB || !_iCanUseWand) && 
             (ObjectManager.Target.HealthPercent > 50 || (Me.ManaPercentage > 90 && ObjectManager.Target.HealthPercent > 10)) 
-            && _myManaPC > 40 && ObjectManager.Target.GetDistance < _maxRange)
+            && _myManaPC > 40 
+            && ObjectManager.Target.GetDistance < _maxRange)
             if (Cast(ShadowBolt))
                 return;
 
         // Life Tap
-        if (Me.HealthPercent > 50 && Me.ManaPercentage < 40 && !ObjectManager.Target.IsTargetingMe
+        if (Me.HealthPercent > 50 
+            && Me.ManaPercentage < 40 
+            && !ObjectManager.Target.IsTargetingMe
             && _settings.UseLifeTap)
             if (Cast(LifeTap))
                 return;
@@ -667,7 +733,10 @@ public static class Warlock
 
         CombatDebug("Launching");
         if (ObjectManager.Target.IsAlive || (!Fight.InFight && ObjectManager.Target.Guid < 1))
+        {
             s.Launch();
+            Usefuls.WaitIsCasting();
+        }
         return true;
     }
 
