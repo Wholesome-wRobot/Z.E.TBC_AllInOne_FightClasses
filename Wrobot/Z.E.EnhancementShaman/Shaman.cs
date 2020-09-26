@@ -26,6 +26,7 @@ public static class Shaman
     internal static int _mediumManaThreshold = 50;
     static List<string> _casterEnemies = new List<string>();
     static TotemManager totemManager = new TotemManager();
+    private static int _pullAttempt;
 
     public static void Initialize()
     {
@@ -42,6 +43,7 @@ public static class Shaman
             _fightingACaster = false;
             _meleeTimer.Reset();
             _pullMeleeTimer.Reset();
+            _pullAttempt = 0;
         };
 
         FightEvents.OnFightStart += (WoWUnit unit, CancelEventArgs cancelable) =>
@@ -194,30 +196,50 @@ public static class Shaman
                 return;
 
         // Pull with Lightning Bolt
-        if (ObjectManager.Target.GetDistance <= _pullRange)
+        if (ObjectManager.Target.GetDistance <= _pullRange
+            && !_goInMelee)
         {
-            bool cast = false;
             // pull with rank one
             if (_settings.PullRankOneLightningBolt 
                 && LightningBolt.IsSpellUsable)
             {
                 MovementManager.StopMove();
                 Lua.RunMacroText("/cast Lightning Bolt(Rank 1)");
-                Usefuls.WaitIsCasting();
-                cast = true;
             }
 
             // pull with max rank
-            if (_settings.PullWithLightningBolt 
+            if (_settings.PullWithLightningBolt
                 && !_settings.PullRankOneLightningBolt
                 && LightningBolt.IsSpellUsable)
-                if (Cast(LightningBolt))
-                    cast = true;
+            {
+                MovementManager.StopMove();
+                Lua.RunMacroText("/cast Lightning Bolt");
+            }
 
-            if (cast)
+            _pullAttempt++;
+            Thread.Sleep(300);
+
+            // Check if we're NOT casting
+            if (!Me.IsCast)
+            {
+                Main.Log($"Pull attempt failed ({_pullAttempt})");
+                if (_pullAttempt > 3)
+                {
+                    Main.Log("Cast unsuccesful, going in melee");
+                    _goInMelee = true;
+                }
                 return;
-            else
-                _goInMelee = true;
+            }
+
+            // If we're casting
+            Usefuls.WaitIsCasting();
+
+            int limit = 1500;
+            while (!Me.InCombatFlagOnly && limit > 0)
+            {
+                Thread.Sleep(100);
+                limit -= 100;
+            }
         }
     }
 
@@ -325,6 +347,12 @@ public static class Shaman
             && _settings.UseLightningShield 
             && (!WaterShield.KnownSpell || !_settings.UseWaterShield))
             if (Cast(LightningShield))
+                return;
+
+        // Earth Shock Focused
+        if (Me.HaveBuff("Focused")
+            && Target.GetDistance < 19f)
+            if (Cast(EarthShock))
                 return;
 
         // Frost Shock
@@ -444,6 +472,7 @@ public static class Shaman
             return false;
         
         s.Launch();
+        Usefuls.WaitIsCasting();
         return true;
     }
 
