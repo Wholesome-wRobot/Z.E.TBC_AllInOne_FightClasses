@@ -23,6 +23,7 @@ public class Main : ICustomClass
     public bool haveCheckedForUpdate = false;
     public static bool HMPrunningAway = false;
     public static string wowVersion;
+    private int dfgfdg;
 
     public float Range
 	{
