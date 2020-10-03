@@ -36,7 +36,7 @@ public class Main : ICustomClass
 
     public void Initialize()
     {
-        FCSettings.Load();
+        AIOTBCSettings.Load();
         AutoUpdater.CheckUpdate(version);
         Logger.Log($"FC version {version}. Discovering class and finding rotation...");
         Logger.Log($"Wow version : {Lua.LuaDoString<string>("v, b, d, t = GetBuildInfo(); return v")}");

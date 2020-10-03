@@ -106,7 +106,7 @@
     <Compile Include="Rotations\Warrior\Fury.cs" />
     <Compile Include="Settings\BasePersistentSettings.cs" />
     <Compile Include="Settings\BaseSettings.cs" />
-    <Compile Include="FCSettings.cs" />
+    <Compile Include="AIOTBCSettings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Talents.cs" />
@@ -138,22 +138,9 @@
     <Content Include="Compiled\Version.txt" />
     <Content Include="Compiled\Wholesome_TBC_AIO_Fightclasses.dll" />
     <Content Include="FodyWeavers.xml" />
-    <Content Include="Resources\Entypo-license.txt" />
-    <Content Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Entypo.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Resources\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\IconsNonShared.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,11 +7,11 @@ using WholesomeTBCAIO.Helpers;
 namespace WholesomeTBCAIO
 {
     [Serializable]
-    public class FCSettings : robotManager.Helpful.Settings
+    public class AIOTBCSettings : robotManager.Helpful.Settings
     {
-        public static FCSettings CurrentSetting { get; set; }
+        public static AIOTBCSettings CurrentSetting { get; set; }
 
-        private FCSettings()
+        private AIOTBCSettings()
         {
             LastUpdateDate = 0;
         }
@@ -22,12 +22,12 @@ namespace WholesomeTBCAIO
         {
             try
             {
-                return Save(AdviserFilePathAndName("ZETBCFCSettings",
+                return Save(AdviserFilePathAndName("AIOTBCSettings",
                     ObjectManager.Me.Name + "." + Usefuls.RealmName));
             }
             catch (Exception e)
             {
-                Logger.LogError("ZETBCFCSettings > Save(): " + e);
+                Logger.LogError("AIOTBCSettings > Save(): " + e);
                 return false;
             }
         }
@@ -36,19 +36,19 @@ namespace WholesomeTBCAIO
         {
             try
             {
-                if (File.Exists(AdviserFilePathAndName("ZETBCFCSettings",
+                if (File.Exists(AdviserFilePathAndName("AIOTBCSettings",
                     ObjectManager.Me.Name + "." + Usefuls.RealmName)))
                 {
-                    CurrentSetting = Load<FCSettings>(
-                        AdviserFilePathAndName("ZETBCFCSettings",
+                    CurrentSetting = Load<AIOTBCSettings>(
+                        AdviserFilePathAndName("AIOTBCSettings",
                         ObjectManager.Me.Name + "." + Usefuls.RealmName));
                     return true;
                 }
-                CurrentSetting = new FCSettings();
+                CurrentSetting = new AIOTBCSettings();
             }
             catch (Exception e)
             {
-                Logger.LogError("ZETBCFCSettings > Load(): " + e);
+                Logger.LogError("AIOTBCSettings > Load(): " + e);
             }
             return false;
         }
