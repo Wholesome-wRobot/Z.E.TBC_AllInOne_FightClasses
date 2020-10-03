@@ -1,0 +1,15 @@
+E:\WoW\WRobot\WRobot\FightClass\TBC_ZE_AllInOne_FightClasses.dll
+E:\WoW\WRobot\WRobot\FightClass\TBC_ZE_AllInOne_FightClasses.pdb
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses.csproj.CoreCompileInputs.cache
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses.dll
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses.pdb
+E:\WoW\WoW TBC\WRobot\WRobot\FightClass\TBC_ZE_AllInOne_FightClasses.dll
+E:\WoW\WoW TBC\WRobot\WRobot\FightClass\TBC_ZE_AllInOne_FightClasses.pdb
+D:\WoW\WoW TBC\WRobot\WRobot\FightClass\TBC_ZE_AllInOne_FightClasses.dll
+D:\WoW\WoW TBC\WRobot\WRobot\FightClass\TBC_ZE_AllInOne_FightClasses.pdb
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses.csprojAssemblyReference.cache
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\Resources\Icons.baml
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\Resources\IconsNonShared.baml
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses_MarkupCompile.cache
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses.g.resources
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Release\TBC_ZE_AllInOne_FightClasses.csproj.CopyComplete

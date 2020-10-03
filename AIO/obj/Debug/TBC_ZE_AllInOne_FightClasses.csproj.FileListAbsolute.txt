@@ -1,0 +1,15 @@
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\TBC_ZE_AllInOne_FightClasses.dll
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\TBC_ZE_AllInOne_FightClasses.pdb
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Debug\TBC_ZE_AllInOne_FightClasses.csprojAssemblyReference.cache
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Debug\TBC_ZE_AllInOne_FightClasses.csproj.CoreCompileInputs.cache
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Debug\TBC_ZE_AllInOne_FightClasses.dll
+C:\Users\Nico\Dropbox\Programmation\WRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Debug\TBC_ZE_AllInOne_FightClasses.pdb
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\MemoryRobot.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\robotManager.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\wManager.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\SlimDX.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\Neo.Lua.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\ScintillaNET.WPF.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\bin\Debug\ScintillaNET.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\TBC_ZE_AllInOne_FightClasses\Wrobot\obj\Debug\TBC_ZE_AllInOne_FightClasses.csproj.CopyComplete

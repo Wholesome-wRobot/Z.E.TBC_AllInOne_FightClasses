@@ -1,0 +1,7 @@
+D:\WoW\WoW TBC\WRobot\WRobot\FightClass\Wholesome_TBC_AIO_Fightclasses.dll
+D:\WoW\WoW TBC\WRobot\WRobot\FightClass\Wholesome_TBC_AIO_Fightclasses.pdb
+C:\Users\Nico\Dropbox\Programmation\wRobot\Wholesome_TBC_AIO_Fightclasses\AIO\obj\Release\Wholesome_TBC_AIO_Fightclasses.csproj.CoreCompileInputs.cache
+C:\Users\Nico\Dropbox\Programmation\wRobot\Wholesome_TBC_AIO_Fightclasses\AIO\obj\Release\Wholesome_TBC_AIO_Fightclasses.dll
+C:\Users\Nico\Dropbox\Programmation\wRobot\Wholesome_TBC_AIO_Fightclasses\AIO\obj\Release\Wholesome_TBC_AIO_Fightclasses.pdb
+C:\Users\Nico\Dropbox\Programmation\wRobot\Wholesome_TBC_AIO_Fightclasses\AIO\obj\Release\Wholesome_TBC_AIO_Fightclasses.csproj.Fody.CopyLocal.cache
+C:\Users\Nico\Dropbox\Programmation\wRobot\Wholesome_TBC_AIO_Fightclasses\AIO\obj\Release\Wholesome_TBC_AIO_Fightclasses.csprojAssemblyReference.cache
