@@ -1,54 +1,13 @@
+AIO/bin/Debug/TBC_ZE_AllInOne_FightClasses\.dll
 
-\.vs/TBC_ZE_AllInOne_FightClasses/v15/\.suo
+AIO/bin/Debug/TBC_ZE_AllInOne_FightClasses\.pdb
 
-\.vs/TBC_ZE_AllInOne_FightClasses/v15/Server/sqlite3/db\.lock
+AIO/obj/
 
-\.vs/TBC_ZE_AllInOne_FightClasses/v15/Server/sqlite3/storage\.ide
+AIO/AutoUpdater.cs
 
-\.vs/TBC_ZE_AllInOne_FightClasses/v15/Server/sqlite3/storage\.ide-shm
+Wholesome_TBC_AIO_Fightclasses.user
 
-\.vs/TBC_ZE_AllInOne_FightClasses/v15/Server/sqlite3/storage\.ide-wal
+Resources
 
-\.vs/Wrobot/v15/\.suo
-
-\.vs/Wrobot/v15/Server/sqlite3/db\.lock
-
-\.vs/Wrobot/v15/Server/sqlite3/storage\.ide
-
-\.vs/ZEEnhancementShaman/v15/\.suo
-
-\.vs/ZEEnhancementShaman/v15/Server/sqlite3/db\.lock
-
-\.vs/ZEEnhancementShaman/v15/Server/sqlite3/storage\.ide
-
-\.vs/ZEFuryWarrior/v15/\.suo
-
-\.vs/ZEFuryWarrior/v15/Server/sqlite3/db\.lock
-
-\.vs/ZEFuryWarrior/v15/Server/sqlite3/storage\.ide
-
-\.vs/ZEHunter/v15/\.suo
-
-\.vs/ZEHunter/v15/Server/sqlite3/db\.lock
-
-\.vs/ZEHunter/v15/Server/sqlite3/storage\.ide
-
-\.vs/ZEPaladin/v15/\.suo
-
-\.vs/ZEPaladin/v15/Server/sqlite3/db\.lock
-
-\.vs/ZEPaladin/v15/Server/sqlite3/storage\.ide
-
-\.vs/ZEPriest/v15/\.suo
-
-\.vs/ZEPriest/v15/Server/sqlite3/db\.lock
-
-\.vs/ZEPriest/v15/Server/sqlite3/storage\.ide
-
-Wrobot/bin/Debug/TBC_ZE_AllInOne_FightClasses\.dll
-
-Wrobot/bin/Debug/TBC_ZE_AllInOne_FightClasses\.pdb
-
-Wrobot/obj/
-
-Wrobot/AutoUpdater.cs
+obj

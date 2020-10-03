@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3E1285D5-CB6B-4AB7-8C98-F909D4F1BA64}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WholesomeTBCAIO</RootNamespace>
+    <AssemblyName>Wholesome_TBC_AIO_Fightclasses</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>D:\WoW\WoW TBC\WRobot\WRobot\FightClass\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MahApps.Metro, Version=1.6.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.6.1\lib\net45\MahApps.Metro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MarsSettingsGUI">
+      <HintPath>..\packages\MarsSettingsGUI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MemoryRobot">
+      <HintPath>D:\WoW\WoW TBC\WRobot\WRobot\Bin\MemoryRobot.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="robotManager">
+      <HintPath>D:\WoW\WoW TBC\WRobot\WRobot\Bin\robotManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="wManager">
+      <HintPath>D:\WoW\WoW TBC\WRobot\WRobot\Bin\wManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoUpdater.cs" />
+    <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Helpers\RangeManager.cs" />
+    <Compile Include="Rotations\Druid\Feral.cs" />
+    <Compile Include="Rotations\Hunter\BeastMastery.cs" />
+    <Compile Include="Rotations\IClassRotation.cs" />
+    <Compile Include="Rotations\Mage\Frost.cs" />
+    <Compile Include="Rotations\Paladin\Retribution.cs" />
+    <Compile Include="Rotations\Priest\Shadow.cs" />
+    <Compile Include="Rotations\Rogue\Combat.cs" />
+    <Compile Include="Rotations\Shaman\Elemental.cs" />
+    <Compile Include="Rotations\Shaman\Enhancement.cs" />
+    <Compile Include="Rotations\Warlock\Affliction.cs" />
+    <Compile Include="Rotations\Warrior\Fury.cs" />
+    <Compile Include="Settings\BasePersistentSettings.cs" />
+    <Compile Include="Settings\BaseSettings.cs" />
+    <Compile Include="FCSettings.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Talents.cs" />
+    <Compile Include="ToolBox.cs" />
+    <Compile Include="Rotations\Hunter\HunterFoodManager.cs" />
+    <Compile Include="Rotations\Hunter\Hunter.cs" />
+    <Compile Include="Settings\HunterSettings.cs" />
+    <Compile Include="Rotations\Warlock\WarlockPetAndConsumables.cs" />
+    <Compile Include="Rotations\Shaman\Shaman.cs" />
+    <Compile Include="Rotations\Shaman\TotemManager.cs" />
+    <Compile Include="Settings\ShamanSettings.cs" />
+    <Compile Include="Rotations\Mage\MageFoodManager.cs" />
+    <Compile Include="Rotations\Mage\Mage.cs" />
+    <Compile Include="Settings\MageSettings.cs" />
+    <Compile Include="Rotations\Druid\Druid.cs" />
+    <Compile Include="Settings\DruidSettings.cs" />
+    <Compile Include="Rotations\Rogue\Rogue.cs" />
+    <Compile Include="Settings\RogueSettings.cs" />
+    <Compile Include="Rotations\Warrior\Warrior.cs" />
+    <Compile Include="Settings\WarriorSettings.cs" />
+    <Compile Include="Rotations\Paladin\Paladin.cs" />
+    <Compile Include="Settings\PaladinSettings.cs" />
+    <Compile Include="Rotations\Priest\Priest.cs" />
+    <Compile Include="Settings\PriestSettings.cs" />
+    <Compile Include="Rotations\Warlock\Warlock.cs" />
+    <Compile Include="Settings\WarlockSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Compiled\Version.txt" />
+    <Content Include="Compiled\Wholesome_TBC_AIO_Fightclasses.dll" />
+    <Content Include="FodyWeavers.xml" />
+    <Content Include="Resources\Entypo-license.txt" />
+    <Content Include="Resources\WindowsIcons-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\Entypo.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\IconsNonShared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)\$(ProjectName).dll" "$(SolutionDir)\AIO\Compiled\$(ProjectName).dll"
+copy /Y "$(TargetDir)\$(ProjectName).dll" "C:\Users\Nico\Desktop\$(ProjectName).dll"
+copy /Y "$(TargetDir)\$(ProjectName).dll" "D:\WoW\WoW Vanilla\WRobot\FightClass\$(ProjectName).dll"</PostBuildEvent>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Fody.6.2.6\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.2.6\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\packages\Fody.6.2.6\build\Fody.targets" Condition="Exists('..\packages\Fody.6.2.6\build\Fody.targets')" />
+</Project>
