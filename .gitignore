@@ -1,13 +1,11 @@
-AIO/bin/Debug/TBC_ZE_AllInOne_FightClasses\.dll
-
-AIO/bin/Debug/TBC_ZE_AllInOne_FightClasses\.pdb
-
-AIO/obj/
-
-AIO/AutoUpdater.cs
+AutoUpdater.cs
 
 Wholesome_TBC_AIO_Fightclasses.user
 
 Resources
 
 obj
+
+AIO/obj/
+
+bin
