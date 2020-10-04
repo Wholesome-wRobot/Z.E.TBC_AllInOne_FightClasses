@@ -148,6 +148,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
 
                 // Totem of Wrath
                 if (!currentFireTotem.Contains("Totem of Wrath")
+                    && !Me.HaveBuff("Totem of Wrath")
                     && Shaman.settings.UseTotemOfWrath)
                 {
                     if (Cast(TotemOfWrath))
