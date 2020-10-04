@@ -42,6 +42,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
             Talents.InitTalents(settings);
 
             _ghostWolfTimer.Start();
+            RangeManager.SetRange(_pullRange);
 
             FightEvents.OnFightEnd += (guid) =>
             {
