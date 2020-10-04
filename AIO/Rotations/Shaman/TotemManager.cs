@@ -21,6 +21,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
         private Spell MagmaTotem = new Spell("Magma Totem");
         private Spell GraceOfAirTotem = new Spell("Grace of Air Totem");
         private Spell EarthElementalTotem = new Spell("Earth Elemental Totem");
+        private Spell TotemOfWrath = new Spell("Totem of Wrath");
 
         public bool CastTotems(IClassRotation spec)
         {
@@ -135,7 +136,8 @@ namespace WholesomeTBCAIO.Rotations.Shaman
                 // Searing Totem
                 if ((!currentFireTotem.Contains("Searing Totem") || _fireTotemPosition == null || Me.Position.DistanceTo(_fireTotemPosition) > 15f)
                     && ObjectManager.Target.GetDistance < 15
-                    && !currentFireTotem.Contains("Magma Totem"))
+                    && !currentFireTotem.Contains("Magma Totem")
+                    && !Shaman.settings.UseTotemOfWrath)
                 {
                     if (Cast(SearingTotem))
                     {
@@ -143,6 +145,15 @@ namespace WholesomeTBCAIO.Rotations.Shaman
                         return true;
                     }
                 }
+
+                // Totem of Wrath
+                if (!currentFireTotem.Contains("Totem of Wrath")
+                    && Shaman.settings.UseTotemOfWrath)
+                {
+                    if (Cast(TotemOfWrath))
+                        return true;
+                }
+
             }
             return false;
         }
@@ -188,7 +199,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
             if (!s.IsSpellUsable || !s.KnownSpell || Me.IsCast)
                 return false;
 
-            if (s.Name.Contains(" Totem"))
+            if (s.Name.Contains(" Totem") || s.Name.Contains("Totem of"))
                 _lastTotemPosition = Me.Position;
 
             s.Launch();

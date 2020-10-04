@@ -34,6 +34,7 @@ namespace WholesomeTBCAIO.Settings
             UseWaterTotems = true;
             UseMagmaTotem = false;
             UseStoneSkinTotem = false;
+            UseTotemOfWrath = true;
 
             Specialization = "Enhancement";
         }
@@ -162,7 +163,13 @@ namespace WholesomeTBCAIO.Settings
         [DisplayName("Magma Totem")]
         [Description("Use Magma Totem on multi aggro")]
         public bool UseMagmaTotem { get; set; }
-        
+
+        [Category("Totems")]
+        [DefaultValue(true)]
+        [DisplayName("Totem of Wrath")]
+        [Description("Use Totem of Wrath")]
+        public bool UseTotemOfWrath { get; set; }
+
         // ELEMENTAL
         [Category("Elemental")]
         [DefaultValue(50)]
