@@ -446,7 +446,7 @@ namespace WholesomeTBCAIO
 
                 if ((toggle && !autoCast) || (!toggle && autoCast))
                 {
-                    Lua.LuaDoString("ToggleSpellAutocast(" + spellIndex + ", 'pet');");
+                    //Lua.LuaDoString("ToggleSpellAutocast(" + spellIndex + ", 'pet');");
                     Lua.LuaDoString("ToggleSpellAutocast('" + spellName + "', 'pet');");
                 }
             }

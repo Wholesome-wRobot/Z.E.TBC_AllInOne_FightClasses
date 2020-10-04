@@ -75,7 +75,8 @@ namespace WholesomeTBCAIO.Rotations.Shaman
             if ((Target.CreatureTypeTarget == "Humanoid" || Target.Name.Contains("Plainstrider"))
                 && settings.ENFrostShockHumanoids
                 && Target.HealthPercent < 40
-                && !Target.HaveBuff("Frost Shock"))
+                && !Target.HaveBuff("Frost Shock")
+                && !Me.HaveBuff("Focused Casting"))
                 if (Cast(FrostShock))
                     return;
 
@@ -85,12 +86,20 @@ namespace WholesomeTBCAIO.Rotations.Shaman
                 if (totemManager.CastTotems(specialization))
                     return;
 
+            // Chain Lightning
+            if (settings.ELChainLightningOnMulti
+                && ObjectManager.GetNumberAttackPlayer() > 1
+                && Me.ManaPercentage > 20)
+                if (Cast(ChainLightning))
+                    return;
+
             // Earth Shock DPS
             if (Target.GetDistance < 19f
                 && (!FlameShock.KnownSpell || !settings.UseFlameShock)
                 && !_fightingACaster
                 && Target.HealthPercent > 25
-                && Me.ManaPercentage > settings.ELShockDPSMana)
+                && Me.ManaPercentage > settings.ELShockDPSMana
+                && !Me.HaveBuff("Focused Casting"))
                 if (Cast(EarthShock))
                     return;
 
@@ -100,7 +109,8 @@ namespace WholesomeTBCAIO.Rotations.Shaman
                 && Target.HealthPercent > 20
                 && !_fightingACaster
                 && settings.UseFlameShock
-                && Me.ManaPercentage > settings.ELShockDPSMana)
+                && Me.ManaPercentage > settings.ELShockDPSMana
+                && !Me.HaveBuff("Focused Casting"))
                 if (Cast(FlameShock))
                     return;
 

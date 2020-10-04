@@ -101,7 +101,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
                 }
 
                 // Stoneskin Totem
-                if ((Shaman.settings.UseStoneSkinTotem || !StrengthOfEarthTotem.KnownSpell || spec is Elemental)
+                if ((Shaman.settings.UseStoneSkinTotem || !StrengthOfEarthTotem.KnownSpell || spec is Elemental || ObjectManager.GetNumberAttackPlayer() > 1)
                     && !Me.HaveBuff("Stoneskin")
                     && !currentEarthTotem.Contains("Stoneclaw Totem")
                     && !currentEarthTotem.Contains("Earth Elemental Totem"))
@@ -161,7 +161,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
 
         private bool CastAirTotem(IClassRotation spec)
         {
-            if (Shaman.settings.UseAirTotems && spec is Enhancement)
+            if (Shaman.settings.UseAirTotems)
             {
                 string currentAirTotem = Lua.LuaDoString<string>
                     (@"local _, totemName, _, _ = GetTotemInfo(4); return totemName;");

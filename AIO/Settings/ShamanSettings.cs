@@ -27,6 +27,7 @@ namespace WholesomeTBCAIO.Settings
 
             ELShockDPSMana = 50;
             ELLBHealthThreshold = 20;
+            ELChainLightningOnMulti = true;
 
             UseAirTotems = true;
             UseEarthTotems = true;
@@ -184,6 +185,12 @@ namespace WholesomeTBCAIO.Settings
         [Description("Only cast Lightning Bolt if enemy is over this percentage of health")]
         [Percentage(true)]
         public int ELLBHealthThreshold { get; set; }
+
+        [Category("Elemental")]
+        [DefaultValue(true)]
+        [DisplayName("CL on multi")]
+        [Description("Use Chain Lightning on multi aggro")]
+        public bool ELChainLightningOnMulti { get; set; }
 
         // TALENT
         [DropdownList(new string[] { "Enhancement", "Elemental" })]

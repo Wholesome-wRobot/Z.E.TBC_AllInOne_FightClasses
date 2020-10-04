@@ -267,6 +267,7 @@ namespace WholesomeTBCAIO.Rotations.Shaman
         protected Spell WarStomp = new Spell("War Stomp");
         protected Spell GiftOfTheNaaru = new Spell("Gift of the Naaru");
         protected Spell ElementalMastery = new Spell("Elemental Mastery");
+        protected Spell ChainLightning = new Spell("Chain Lightning");
 
         protected bool Cast(Spell s)
         {
