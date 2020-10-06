@@ -36,8 +36,8 @@ using wManager.Wow.Helpers;
 
             try
             {
-            AIOTBCSettings.CurrentSetting.LastUpdateDate = elapsedTicks;
-            AIOTBCSettings.CurrentSetting.Save();
+                AIOTBCSettings.CurrentSetting.LastUpdateDate = elapsedTicks;
+                AIOTBCSettings.CurrentSetting.Save();
 
                 Logger.Log("Starting updater");
                 string onlineFile = "https://github.com/Wholesome-wRobot/Wholesome-TBC-AIO-Fightclasses/raw/master/AIO/Compiled/Wholesome_TBC_AIO_Fightclasses.dll";
