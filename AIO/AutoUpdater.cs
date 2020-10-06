@@ -40,10 +40,10 @@ using wManager.Wow.Helpers;
             AIOTBCSettings.CurrentSetting.Save();
 
                 Logger.Log("Starting updater");
-                string onlineFile = "https://github.com/Wholesome-wRobot/Z.E.TBC_AllInOne_FightClasses/raw/newsettings/AIO/Compiled/Wholesome_TBC_AIO_Fightclasses.dll";
+                string onlineFile = "https://github.com/Wholesome-wRobot/Wholesome-TBC-AIO-Fightclasses/raw/master/AIO/Compiled/Wholesome_TBC_AIO_Fightclasses.dll";
 
                 // Version check
-                string onlineVersion = "https://raw.githubusercontent.com/Wholesome-wRobot/Z.E.TBC_AllInOne_FightClasses/newsettings/AIO/Compiled/Version.txt";
+                string onlineVersion = "https://raw.githubusercontent.com/Wholesome-wRobot/Wholesome-TBC-AIO-Fightclasses/master/AIO/Compiled/Version.txt";
                 var onlineVersionContent = new WebClient { Encoding = Encoding.UTF8 }.DownloadString(onlineVersion);
                 if (onlineVersionContent == null || onlineVersionContent.Length > 10 || onlineVersionContent == MyCurrentVersion)
                 {
